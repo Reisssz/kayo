@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Kayo Caldeira — Filmmaker & Editor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #03060f;
+  --bg2: #060c1a;
+  --bg3: #0a1225;
+  --blue: #0d5ce8;
+  --blue-light: #3b82f6;
+  --blue-glow: rgba(13, 92, 232, 0.4);
+  --blue-dim: #1e3a8a;
+  --blue-pale: #60a5fa;
+  --text: #e0e8ff;
+  --text2: #8fa4cc;
+  --text3: #2d4068;
+  --accent: #93c5fd;
+  --white: #ffffff;
+  --gold: #f59e0b;
+  --gold-dim: rgba(245, 158, 11, 0.15);
+  --font-display: 'Bebas Neue', cursive;
+  --font-body: 'DM Sans', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-cinematic: cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+html { scroll-behavior: smooth; overflow-x: hidden; }
+body { background: var(--bg); color: var(--text); font-family: var(--font-body); overflow-x: hidden; cursor: none; }
+
+.hero-video-container,
+.work-card,
+.featured-item,
+.featured-main,
+.showreel-wrapper,
+.about-frame {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* CURSOR */
+@media (pointer: fine) {
+  #cursor-dot { width: 6px; height: 6px; background: #fff; border-radius: 50%; position: fixed; top: 0; left: 0; transform: translate(-50%, -50%); pointer-events: none; z-index: 9999; transition: transform 0.08s, background 0.3s; }
+  #cursor-ring { width: 36px; height: 36px; border: 1px solid rgba(93,161,251,0.5); border-radius: 50%; position: fixed; top: 0; left: 0; transform: translate(-50%,-50%); pointer-events: none; z-index: 9999; transition: width 0.4s var(--ease-bounce), height 0.4s var(--ease-bounce), border-color 0.3s, opacity 0.3s; }
+  body.cursor-hover #cursor-ring { width: 60px; height: 60px; border-color: var(--blue-light); opacity: 0.7; }
+  body.cursor-video #cursor-ring { width: 80px; height: 80px; border-color: var(--blue-light); opacity: 0.9; }
+  body.cursor-video #cursor-dot { background: var(--blue-light); transform: translate(-50%,-50%) scale(2); }
+}
+@media (pointer: coarse) { body { cursor: auto; } #cursor-dot, #cursor-ring { display: none; } }
+
+/* NOISE */
+body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E"); opacity: 0.02; pointer-events: none; z-index: 9997; }
+
+/* SCROLL PROGRESS */
+#scroll-progress { position: fixed; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(to right, var(--blue), var(--blue-light)); transform-origin: left; z-index: 9996; transform: scaleX(0); transition: transform 0.1s linear; }
+
+/* BG LINES */
+.bg-line { position: fixed; top: 0; bottom: 0; width: 1px; background: linear-gradient(to bottom, transparent 0%, var(--blue-glow) 50%, transparent 100%); pointer-events: none; z-index: 0; opacity: 0; }
+.bg-line:nth-child(1) { left: 20%; animation: lineAnim 10s ease-in-out 0s infinite; }
+.bg-line:nth-child(2) { left: 40%; animation: lineAnim 10s ease-in-out 2s infinite; }
+.bg-line:nth-child(3) { left: 60%; animation: lineAnim 10s ease-in-out 4s infinite; }
+.bg-line:nth-child(4) { left: 80%; animation: lineAnim 10s ease-in-out 6s infinite; }
+@keyframes lineAnim { 0%,100%{opacity:0;transform:scaleY(0.2)} 30%,70%{opacity:0.25} 50%{opacity:0.4;transform:scaleY(1)} }
+
+/* NAV */
+nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 clamp(1rem,5vw,3rem); height: 70px; display: flex; justify-content: space-between; align-items: center; }
+nav::before { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(3,6,15,0.95) 0%, transparent 100%); pointer-events: none; transition: background 0.3s; }
+nav.scrolled::before { background: rgba(3,6,15,0.97); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(13,92,232,0.15); }
+.nav-logo { font-family: var(--font-display); font-size: clamp(1.4rem,5vw,1.8rem); letter-spacing: 0.08em; color: var(--text); text-decoration: none; position: relative; z-index: 1; transition: color 0.3s; }
+.nav-logo span { color: var(--blue-light); }
+.nav-logo:hover { color: var(--accent); }
+.nav-center { display: flex; gap: 0; position: relative; z-index: 1; border: 1px solid rgba(13,92,232,0.2); overflow: hidden; }
+.nav-link { color: var(--text3); text-decoration: none; font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; font-family: var(--font-mono); padding: 0.5rem 1.2rem; transition: all 0.3s; position: relative; border-right: 1px solid rgba(13,92,232,0.2); }
+.nav-link:last-child { border-right: none; }
+.nav-link::before { content: ''; position: absolute; inset: 0; background: var(--blue); transform: scaleY(0); transform-origin: bottom; transition: transform 0.3s var(--ease-cinematic); }
+.nav-link:hover::before { transform: scaleY(1); }
+.nav-link span { position: relative; z-index: 1; transition: color 0.3s; }
+.nav-link:hover span { color: #fff; }
+.nav-cta { background: transparent; border: 1px solid var(--blue); color: var(--accent); padding: 0.5rem 1.4rem; font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.1em; cursor: pointer; transition: all 0.3s; position: relative; z-index: 1; text-transform: uppercase; overflow: hidden; }
+.nav-cta::before { content: ''; position: absolute; inset: 0; background: var(--blue); transform: translateX(-100%); transition: transform 0.4s var(--ease-cinematic); }
+.nav-cta:hover::before { transform: translateX(0); }
+.nav-cta span { position: relative; z-index: 1; }
+.nav-cta:hover span { color: #fff; }
+.hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; z-index: 1; padding: 5px; }
+.hamburger span { display: block; width: 24px; height: 1px; background: var(--text); transition: all 0.4s var(--ease-cinematic); transform-origin: center; }
+.hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(4px,4px); }
+.hamburger.open span:nth-child(2) { opacity: 0; transform: translateX(-10px); }
+.hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(4px,-4px); }
+.mobile-menu { position: fixed; inset: 0; background: rgba(3,6,15,0.98); z-index: 99; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2rem; transform: translateY(-100%); transition: transform 0.6s var(--ease-cinematic); backdrop-filter: blur(20px); }
+.mobile-menu.open { transform: translateY(0); }
+.mobile-menu a { font-family: var(--font-display); font-size: clamp(2rem,8vw,4rem); color: var(--text3); text-decoration: none; letter-spacing: 0.05em; text-transform: uppercase; transition: all 0.3s; position: relative; }
+.mobile-menu a::after { content: ''; position: absolute; left: 0; bottom: -4px; width: 0; height: 2px; background: var(--blue-light); transition: width 0.4s var(--ease-cinematic); }
+.mobile-menu a:hover { color: var(--text); }
+.mobile-menu a:hover::after { width: 100%; }
+
+/* LOADER */
+#loader { position: fixed; inset: 0; z-index: 1000; background: var(--bg); display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 1.5rem; transition: opacity 0.8s var(--ease-cinematic), visibility 0.8s; }
+#loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+.loader-logo { font-family: var(--font-display); font-size: clamp(2.5rem,8vw,5rem); letter-spacing: 0.15em; text-transform: uppercase; background: linear-gradient(135deg, var(--blue-light), var(--accent)); -webkit-background-clip: text; background-clip: text; color: transparent; animation: loaderPulse 2s ease-in-out infinite; }
+@keyframes loaderPulse { 0%,100%{opacity:0.4;filter:blur(2px)} 50%{opacity:1;filter:blur(0)} }
+.loader-bar-wrap { width: 240px; height: 1px; background: var(--bg3); overflow: hidden; }
+.loader-bar-fill { height: 100%; background: linear-gradient(to right, var(--blue), var(--blue-light)); width: 0%; transition: width 0.1s linear; }
+.loader-pct { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.3em; color: var(--text3); }
+
+/* HERO */
+#hero { height: 100vh; min-height: 700px; display: flex; align-items: flex-end; padding: 0 clamp(1rem,5vw,3rem) clamp(3rem,8vh,5rem); position: relative; overflow: hidden; }
+.hero-video-container { position: absolute; inset: 0; z-index: 0; overflow: hidden; }
+.hero-video-container iframe { width: 100%; height: 100%; object-fit: cover; pointer-events: none; transform: scale(1.02); }
+/* Wrapper para cobrir o iframe com filtro via pseudoelemento */
+.hero-video-container::after { content: ''; position: absolute; inset: 0; mix-blend-mode: multiply; background: rgba(0,0,30,0.55); pointer-events: none; }
+.hero-grad { position: absolute; inset: 0; z-index: 1; background: linear-gradient(135deg, rgba(3,6,15,0.88) 0%, rgba(3,6,15,0.3) 50%, rgba(3,6,15,0.75) 100%), linear-gradient(to top, rgba(3,6,15,1) 0%, rgba(3,6,15,0.2) 40%, transparent 70%); }
+.hero-scanlines { position: absolute; inset: 0; z-index: 2; background-image: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.04) 2px, rgba(0,0,0,0.04) 4px); pointer-events: none; }
+.blue-orb { position: absolute; z-index: 1; border-radius: 50%; pointer-events: none; animation: orbFloat 9s ease-in-out infinite; }
+.blue-orb-1 { width: min(600px,70vw); height: min(600px,70vw); background: radial-gradient(circle, rgba(13,92,232,0.18) 0%, transparent 70%); top: 10%; left: 35%; animation-duration: 9s; }
+.blue-orb-2 { width: min(300px,40vw); height: min(300px,40vw); background: radial-gradient(circle, rgba(59,130,246,0.12) 0%, transparent 70%); bottom: 20%; right: 15%; animation-duration: 7s; animation-delay: 2s; }
+@keyframes orbFloat { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(25px,-18px) scale(1.04)} 66%{transform:translate(-15px,12px) scale(0.97)} }
+.hero-content { position: relative; z-index: 3; max-width: 1000px; width: 100%; }
+.hero-eyebrow { font-family: var(--font-mono); font-size: clamp(0.6rem,2vw,0.7rem); letter-spacing: 0.35em; color: var(--blue-light); text-transform: uppercase; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; opacity: 0; animation: slideInLeft 0.9s 0.6s var(--ease-cinematic) forwards; }
+.hero-eyebrow::before { content: ''; width: clamp(30px,5vw,40px); height: 1px; background: var(--blue-light); flex-shrink: 0; }
+.hero-title { font-family: var(--font-display); font-size: clamp(3.5rem,12vw,9rem); line-height: 0.88; letter-spacing: 0.02em; text-transform: uppercase; }
+.hero-title .line { overflow: hidden; display: block; }
+.hero-title .line-inner { display: block; opacity: 0; transform: translateY(100%); animation: lineReveal 1s var(--ease-cinematic) forwards; }
+.hero-title .line:nth-child(1) .line-inner { animation-delay: 0.8s; }
+.hero-title .line:nth-child(2) .line-inner { animation-delay: 1s; color: var(--blue-light); }
+@keyframes lineReveal { to { opacity: 1; transform: translateY(0); } }
+.hero-sub { font-size: clamp(0.9rem,2.5vw,1.1rem); color: var(--text2); max-width: 550px; line-height: 1.6; margin-top: 2rem; font-weight: 300; opacity: 0; animation: slideInLeft 0.9s 1.3s var(--ease-cinematic) forwards; }
+@keyframes slideInLeft { from{opacity:0;transform:translateX(-30px)} to{opacity:1;transform:translateX(0)} }
+.hero-ctas { display: flex; gap: clamp(0.8rem,3vw,1.5rem); margin-top: 2rem; flex-wrap: wrap; opacity: 0; animation: fadeUp 0.8s 1.5s var(--ease-cinematic) forwards; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+.btn-primary { background: var(--blue); color: #fff; padding: 0.9rem 2rem; font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; border: none; transition: all 0.3s; position: relative; overflow: hidden; }
+.btn-primary::after { content: ''; position: absolute; inset: 0; background: var(--blue-light); transform: translateX(-100%); transition: transform 0.4s var(--ease-cinematic); }
+.btn-primary:hover::after { transform: translateX(0); }
+.btn-primary span { position: relative; z-index: 1; }
+.btn-outline { background: transparent; color: var(--accent); padding: 0.9rem 2rem; font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; border: 1px solid var(--blue); transition: all 0.3s; }
+.btn-outline:hover { background: rgba(13,92,232,0.1); border-color: var(--blue-light); }
+.hero-stats { position: absolute; right: clamp(1rem,5vw,3rem); bottom: clamp(2rem,8vh,5rem); z-index: 3; display: flex; gap: clamp(1.5rem,4vw,3rem); flex-wrap: wrap; opacity: 0; animation: fadeUp 0.8s 1.8s var(--ease-cinematic) forwards; }
+.stat-item { text-align: center; }
+.stat-num { font-family: var(--font-display); font-size: clamp(2rem,5vw,2.8rem); color: var(--blue-light); line-height: 1; letter-spacing: 0.05em; }
+.stat-lbl { font-family: var(--font-mono); font-size: clamp(0.5rem,2vw,0.6rem); letter-spacing: 0.2em; color: var(--text3); text-transform: uppercase; margin-top: 0.2rem; }
+.hero-scroll-hint { position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); z-index: 3; display: flex; flex-direction: column; align-items: center; gap: 0.6rem; opacity: 0; animation: fadeUp 0.8s 2s var(--ease-cinematic) forwards; }
+.hero-scroll-hint p { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.3em; color: var(--text3); text-transform: uppercase; }
+.scroll-arrow { width: 1px; height: 50px; background: linear-gradient(to bottom, var(--blue-light), transparent); animation: scrollPulse 2s ease-in-out infinite; }
+@keyframes scrollPulse { 0%,100%{opacity:0;transform:scaleY(0.3);transform-origin:top} 50%{opacity:1;transform:scaleY(1)} }
+
+@media (max-width: 1100px) { .hero-stats{position:relative;right:auto;bottom:auto;margin-top:2rem;justify-content:flex-start;animation:none;opacity:1} #hero{align-items:center;padding-bottom:3rem} .hero-content{padding-top:70px} .hero-scroll-hint{display:none} }
+@media (max-width: 768px) { #hero{min-height:100vh;padding:0 1.5rem 2rem} .hero-ctas{flex-direction:column;width:100%} .btn-primary,.btn-outline{width:100%;text-align:center} .hero-stats{gap:1.5rem;margin-top:1.5rem} }
+
+/* SECTIONS */
+section { padding: clamp(4rem,10vw,8rem) clamp(1rem,5vw,3rem); position: relative; }
+.section-label { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.35em; color: var(--blue-light); text-transform: uppercase; margin-bottom: 1rem; display: flex; align-items: center; gap: 1rem; }
+.section-label::before { content: ''; width: 24px; height: 1px; background: var(--blue-light); flex-shrink: 0; }
+.section-title { font-family: var(--font-display); font-size: clamp(2.5rem,6vw,5rem); line-height: 0.95; letter-spacing: 0.02em; text-transform: uppercase; margin-bottom: 2rem; }
+
+/* REVEAL */
+.reveal, .reveal-left, .reveal-right, .reveal-scale { opacity: 0; transition: opacity 0.9s var(--ease-cinematic), transform 0.9s var(--ease-cinematic); }
+.reveal { transform: translateY(50px); }
+.reveal-left { transform: translateX(-50px); }
+.reveal-right { transform: translateX(50px); }
+.reveal-scale { transform: scale(0.96); }
+.reveal.visible, .reveal-left.visible, .reveal-right.visible, .reveal-scale.visible { opacity: 1; transform: translateY(0) translateX(0) scale(1); }
+
+/* MARQUEE */
+#clients { padding: 2rem 0; background: var(--bg); border-top: 1px solid rgba(13,92,232,0.12); border-bottom: 1px solid rgba(13,92,232,0.12); overflow: hidden; }
+.marquee-track { display: flex; overflow: hidden; white-space: nowrap; }
+.marquee-row { display: flex; animation: marqueeScroll 20s linear infinite; flex-shrink: 0; }
+.marquee-item { font-family: var(--font-display); font-size: clamp(0.9rem,3vw,1.1rem); letter-spacing: 0.15em; color: var(--text3); text-transform: uppercase; padding: 0.5rem 1.5rem; transition: color 0.3s; white-space: nowrap; }
+.marquee-item:hover { color: var(--blue-light); }
+@keyframes marqueeScroll { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+/* ===== VIMEO THUMBNAIL CARDS ===== */
+/* Cards de trabalho com thumbnail do Vimeo e overlay de play */
+.work-card { position: relative; overflow: hidden; cursor: pointer; background: var(--bg3); aspect-ratio: 16/9; }
+.work-card .vimeo-thumb { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.8s var(--ease-cinematic), filter 0.5s; filter: saturate(0.5) brightness(0.65); }
+@media (hover: hover) and (pointer: fine) {
+  .work-card:hover .vimeo-thumb { transform: scale(1.07); filter: saturate(1.3) brightness(0.85); }
+}
+.work-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(3,6,15,0.95) 0%, rgba(3,6,15,0.2) 45%, transparent 70%); opacity: 0; transition: opacity 0.45s; display: flex; flex-direction: column; justify-content: flex-end; padding: 1.5rem; }
+.work-card:hover .work-overlay { opacity: 1; }
+.work-badge { position: absolute; top: 0.8rem; left: 0.8rem; background: rgba(3,6,15,0.85); border: 1px solid rgba(13,92,232,0.3); font-family: var(--font-mono); font-size: 0.55rem; padding: 0.3rem 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text2); backdrop-filter: blur(4px); z-index: 2; }
+.work-cat { font-family: var(--font-mono); font-size: 0.55rem; letter-spacing: 0.25em; color: var(--blue-light); text-transform: uppercase; margin-bottom: 0.4rem; }
+.work-name { font-family: var(--font-display); font-size: 1.4rem; letter-spacing: 0.04em; text-transform: uppercase; color: #fff; }
+.work-play { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%) scale(0.6); opacity: 0; width: 60px; height: 60px; border: 1.5px solid rgba(255,255,255,0.5); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.4s var(--ease-bounce); backdrop-filter: blur(4px); background: rgba(13,92,232,0.2); z-index: 3; }
+.work-card:hover .work-play { transform: translate(-50%,-50%) scale(1); opacity: 1; }
+
+/* ===== FEATURED com thumbnail Vimeo ===== */
+#featured { background: var(--bg); overflow: hidden; }
+.featured-header { padding: 0 clamp(1rem,5vw,3rem); margin-bottom: 0; }
+.featured-badge { display: inline-flex; align-items: center; gap: 0.7rem; background: var(--gold-dim); border: 1px solid rgba(245,158,11,0.35); padding: 0.4rem 1rem; margin-bottom: 1.5rem; }
+.featured-badge span { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.25em; color: var(--gold); text-transform: uppercase; }
+.featured-badge::before { content: '★'; color: var(--gold); font-size: 0.65rem; }
+.featured-headline { font-family: var(--font-display); font-size: clamp(2.5rem,7vw,5.5rem); line-height: 0.9; letter-spacing: 0.02em; text-transform: uppercase; margin-bottom: 0.8rem; }
+.featured-headline em { font-style: normal; color: var(--gold); display: block; }
+.featured-sub { font-family: var(--font-mono); font-size: 0.7rem; color: var(--text3); letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 3rem; max-width: 600px; line-height: 1.7; }
+.featured-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+.featured-main { grid-row: span 2; position: relative; overflow: hidden; cursor: pointer; aspect-ratio: 9/16; }
+@media (min-width: 900px) { .featured-main { aspect-ratio: auto; } }
+.featured-side { display: flex; flex-direction: column; gap: 2px; }
+.featured-item { position: relative; overflow: hidden; cursor: pointer; aspect-ratio: 16/9; }
+.featured-item .vimeo-thumb, .featured-main .vimeo-thumb { width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s var(--ease-cinematic), filter 0.5s; filter: saturate(0.5) brightness(0.65); display: block; }
+@media (hover: hover) and (pointer: fine) {
+  .featured-item:hover .vimeo-thumb, .featured-main:hover .vimeo-thumb { transform: scale(1.06); filter: saturate(1.1) brightness(0.75); }
+}
+.featured-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(3,6,15,0.96) 0%, rgba(3,6,15,0.1) 50%, transparent 80%); display: flex; flex-direction: column; justify-content: flex-end; padding: 1.5rem; transition: background 0.4s; }
+.featured-main .featured-overlay { padding: 2rem; }
+.featured-item:hover .featured-overlay, .featured-main:hover .featured-overlay { background: linear-gradient(to top, rgba(3,6,15,0.98) 0%, rgba(3,6,15,0.3) 60%, transparent 85%); }
+.feat-star { font-family: var(--font-mono); font-size: 0.55rem; letter-spacing: 0.25em; color: var(--gold); text-transform: uppercase; margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.5rem; }
+.feat-star::before { content: '★'; }
+.feat-title { font-family: var(--font-display); font-size: 1.6rem; text-transform: uppercase; letter-spacing: 0.04em; color: #fff; }
+.featured-main .feat-title { font-size: clamp(1.8rem,4vw,2.8rem); }
+.feat-desc { font-size: 0.8rem; color: var(--text2); font-weight: 300; margin-top: 0.4rem; line-height: 1.5; }
+.feat-play { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%) scale(0.6); opacity: 0; width: 60px; height: 60px; border: 1.5px solid rgba(245,158,11,0.6); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.4s var(--ease-bounce); background: rgba(245,158,11,0.12); backdrop-filter: blur(4px); }
+.featured-main .feat-play { width: 80px; height: 80px; }
+.featured-item:hover .feat-play, .featured-main:hover .feat-play { transform: translate(-50%,-50%) scale(1); opacity: 1; }
+
+@media (max-width: 700px) { .featured-grid{grid-template-columns:1fr} .featured-main{aspect-ratio:16/9} .featured-side{gap:2px} }
+
+/* WORKS */
+#works { background: var(--bg2); }
+.works-filter { display: flex; gap: 0; margin-bottom: 2rem; overflow-x: auto; scrollbar-width: none; flex-wrap: wrap; }
+.works-filter::-webkit-scrollbar { display: none; }
+.filter-btn { background: transparent; border: 1px solid var(--text3); border-right: none; color: var(--text3); font-family: var(--font-mono); font-size: clamp(0.6rem,2vw,0.7rem); letter-spacing: 0.12em; padding: 0.6rem 1.2rem; cursor: pointer; text-transform: uppercase; transition: all 0.3s; white-space: nowrap; }
+.filter-btn:last-child { border-right: 1px solid var(--text3); }
+.filter-btn.active, .filter-btn:hover { background: var(--blue); color: #fff; border-color: var(--blue); }
+.works-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; }
+
+/* ABOUT */
+#about { background: var(--bg); display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: clamp(2rem,6vw,5rem); align-items: center; }
+.about-visual { position: relative; }
+.about-frame { position: relative; aspect-ratio: 3/4; overflow: hidden; border: 1px solid rgba(13,92,232,0.2); }
+.about-frame video { width: 100%; height: 100%; object-fit: cover; filter: saturate(0.6) contrast(1.1); transition: filter 0.6s; }
+.about-tag { position: absolute; bottom: -0.8rem; right: -0.8rem; background: var(--blue); color: #fff; font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.18em; padding: 0.6rem 1.2rem; text-transform: uppercase; }
+.about-deco { position: absolute; top: -0.8rem; left: -0.8rem; width: 50px; height: 50px; border-top: 1px solid var(--blue); border-left: 1px solid var(--blue); pointer-events: none; }
+.about-text p { color: var(--text2); line-height: 1.7; font-size: clamp(0.9rem,2.5vw,1rem); font-weight: 300; margin-bottom: 1.2rem; }
+.skills-row { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 1.5rem 0; }
+.skill-tag { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.1em; color: var(--blue-pale); padding: 0.35rem 0.9rem; border: 1px solid rgba(13,92,232,0.25); text-transform: uppercase; transition: all 0.3s; }
+.skill-tag:hover { background: rgba(13,92,232,0.1); border-color: var(--blue-light); }
+.workflow-badge { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(13,92,232,0.07); border: 1px solid rgba(13,92,232,0.2); padding: 0.5rem 1rem; margin-bottom: 1rem; }
+.workflow-badge span { font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.12em; color: var(--accent); text-transform: uppercase; }
+.workflow-badge::before { content: '◈'; color: var(--blue-light); }
+
+/* GEAR */
+#gear { background: var(--bg2); }
+.gear-intro { max-width: 600px; color: var(--text2); font-weight: 300; line-height: 1.7; margin-bottom: 3rem; }
+.gear-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
+.gear-card { background: var(--bg3); border: 1px solid rgba(13,92,232,0.1); padding: 0; overflow: hidden; transition: border-color 0.35s, transform 0.4s var(--ease-smooth); position: relative; }
+.gear-card:hover { border-color: var(--blue); transform: translateY(-5px); }
+.gear-img { width: 100%; aspect-ratio: 16/9; overflow: hidden; background: var(--bg); display: flex; align-items: center; justify-content: center; position: relative; }
+.gear-img-photo { width: 100%; height: 100%; object-fit: contain; padding: 1.5rem; filter: brightness(0.8) saturate(0.6); transition: filter 0.4s; background: linear-gradient(135deg, rgba(13,92,232,0.06), rgba(3,6,15,0.8)); }
+.gear-card:hover .gear-img-photo { filter: brightness(0.95) saturate(0.9); }
+.gear-body { padding: 1.2rem 1.5rem 1.5rem; }
+.gear-cat { font-family: var(--font-mono); font-size: 0.55rem; letter-spacing: 0.25em; color: var(--blue-light); text-transform: uppercase; margin-bottom: 0.4rem; }
+.gear-name { font-family: var(--font-display); font-size: 1.3rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text); margin-bottom: 0.5rem; }
+.gear-desc { font-size: 0.8rem; color: var(--text2); font-weight: 300; line-height: 1.55; }
+.gear-spec { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.8rem; }
+.gear-spec span { font-family: var(--font-mono); font-size: 0.55rem; letter-spacing: 0.08em; color: var(--text3); padding: 0.25rem 0.6rem; border: 1px solid rgba(13,92,232,0.15); text-transform: uppercase; }
+.davinci-block { margin-top: 3rem; background: linear-gradient(135deg, rgba(13,92,232,0.06), rgba(245,158,11,0.04)); border: 1px solid rgba(13,92,232,0.18); padding: 2rem; display: grid; grid-template-columns: auto 1fr; gap: 1.5rem; align-items: center; }
+.davinci-icon { width: 56px; height: 56px; border: 1px solid rgba(245,158,11,0.3); display: flex; align-items: center; justify-content: center; flex-shrink: 0; background: var(--gold-dim); }
+.davinci-icon span { font-family: var(--font-display); font-size: 1.4rem; color: var(--gold); letter-spacing: 0.05em; }
+.davinci-label { font-family: var(--font-mono); font-size: 0.55rem; letter-spacing: 0.25em; color: var(--gold); text-transform: uppercase; margin-bottom: 0.3rem; }
+.davinci-title { font-family: var(--font-display); font-size: 1.6rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text); margin-bottom: 0.4rem; }
+.davinci-desc { font-size: 0.85rem; color: var(--text2); font-weight: 300; line-height: 1.6; }
+@media (max-width: 560px) { .davinci-block { grid-template-columns: 1fr; } }
+
+/* SERVICES */
+#services { background: var(--bg2); }
+.services-inner { margin-bottom: 2rem; }
+.h-scroll { overflow-x: auto; padding: 0.5rem clamp(1rem,5vw,3rem) 2rem; scrollbar-width: none; cursor: grab; }
+.h-scroll::-webkit-scrollbar { display: none; }
+.h-scroll:active { cursor: grabbing; }
+.h-track { display: flex; gap: 1rem; width: max-content; }
+.svc-card { width: min(320px,85vw); flex-shrink: 0; background: var(--bg3); border: 1px solid rgba(13,92,232,0.1); padding: 2rem; position: relative; transition: border-color 0.35s, transform 0.4s var(--ease-smooth); }
+.svc-card:hover { border-color: var(--blue); transform: translateY(-6px); }
+.svc-num { font-family: var(--font-display); font-size: 3.5rem; color: transparent; -webkit-text-stroke: 1px rgba(13,92,232,0.2); line-height: 1; margin-bottom: 1rem; }
+.svc-card:hover .svc-num { -webkit-text-stroke-color: var(--blue); }
+.svc-title { font-family: var(--font-display); font-size: 1.5rem; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 0.8rem; color: var(--text); }
+.svc-desc { color: var(--text2); font-size: 0.85rem; line-height: 1.6; font-weight: 300; }
+
+/* CONTACT */
+#contact { background: var(--bg2); display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: clamp(2rem,6vw,5rem); align-items: start; }
+.contact-head { font-family: var(--font-display); font-size: clamp(2.5rem,6vw,4.5rem); line-height: 0.95; letter-spacing: 0.02em; text-transform: uppercase; margin-bottom: 1.5rem; }
+.contact-head em { font-style: normal; display: block; color: var(--blue-light); }
+.contact-desc { color: var(--text2); font-weight: 300; line-height: 1.7; max-width: 380px; margin-bottom: 2rem; }
+.contact-list { display: flex; flex-direction: column; border-top: 1px solid rgba(13,92,232,0.12); }
+.contact-row { display: flex; flex-direction: column; gap: 0.3rem; padding: 1rem 0; border-bottom: 1px solid rgba(13,92,232,0.12); }
+.c-row-lbl { font-family: var(--font-mono); font-size: 0.55rem; letter-spacing: 0.25em; color: var(--text3); text-transform: uppercase; }
+.c-row-val { font-size: 0.9rem; color: var(--text); font-weight: 300; word-break: break-word; }
+.c-row-val a { color: var(--text); text-decoration: none; transition: color 0.3s; }
+.c-row-val a:hover { color: var(--blue-light); }
+.socials { display: flex; gap: 0.8rem; margin-top: 1.5rem; flex-wrap: wrap; }
+.social-btn { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.12em; color: var(--text3); text-decoration: none; text-transform: uppercase; padding: 0.5rem 1rem; border: 1px solid rgba(13,92,232,0.2); transition: all 0.3s; }
+.social-btn:hover { color: var(--text); border-color: var(--blue); background: rgba(13,92,232,0.06); }
+.contact-form { display: flex; flex-direction: column; gap: 1rem; }
+.form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+.form-label { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.2em; color: var(--text3); text-transform: uppercase; }
+.form-input, .form-textarea, .form-select { background: rgba(13,92,232,0.04); border: 1px solid rgba(13,92,232,0.15); color: var(--text); font-family: var(--font-body); font-size: 0.9rem; padding: 0.8rem 1rem; transition: border-color 0.3s, box-shadow 0.3s; outline: none; font-weight: 300; width: 100%; }
+.form-input:focus, .form-textarea:focus, .form-select:focus { border-color: var(--blue); box-shadow: 0 0 0 2px rgba(13,92,232,0.12); background: rgba(13,92,232,0.07); }
+.form-textarea { height: 110px; resize: vertical; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+.submit-btn { background: var(--blue); border: none; color: #fff; font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.15em; padding: 1rem; cursor: pointer; text-transform: uppercase; transition: all 0.3s; position: relative; overflow: hidden; }
+.submit-btn::before { content: ''; position: absolute; inset: 0; background: var(--blue-light); transform: translateX(-101%); transition: transform 0.4s var(--ease-cinematic); }
+.submit-btn:hover::before { transform: translateX(0); }
+.submit-btn span { position: relative; z-index: 1; }
+.form-msg { font-family: var(--font-mono); font-size: 0.7rem; padding: 0.8rem; display: none; }
+.form-msg.success { display: block; border: 1px solid #22c55e; color: #22c55e; background: rgba(34,197,94,0.08); }
+.form-msg.error { display: block; border: 1px solid #ef4444; color: #ef4444; background: rgba(239,68,68,0.08); }
+@media (max-width: 640px) { .form-row { grid-template-columns: 1fr; } }
+
+/* VIDEO MODAL — agora usa iframe do Vimeo */
+#video-modal { position: fixed; inset: 0; z-index: 500; background: rgba(3,6,15,0.98); display: none; align-items: center; justify-content: center; backdrop-filter: blur(16px); }
+#video-modal.open { display: flex; }
+.modal-wrap { width: 92vw; max-width: 1100px; position: relative; }
+.modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem; }
+.modal-title { font-family: var(--font-display); font-size: 1.2rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+.modal-close { background: none; border: 1px solid rgba(13,92,232,0.3); color: var(--text2); font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.1em; cursor: pointer; padding: 0.4rem 1rem; text-transform: uppercase; transition: all 0.3s; }
+.modal-close:hover { border-color: var(--blue-light); color: var(--text); }
+.video-frame { width: 100%; aspect-ratio: 16/9; background: var(--bg3); border: 1px solid rgba(13,92,232,0.2); overflow: hidden; }
+.video-frame iframe { width: 100%; height: 100%; border: none; }
+
+/* FOOTER */
+footer { background: var(--bg); border-top: 1px solid rgba(13,92,232,0.1); padding: clamp(2rem,8vw,4rem) clamp(1rem,5vw,3rem) clamp(2rem,5vw,3rem); }
+.footer-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 3rem; gap: 2rem; flex-wrap: wrap; }
+.footer-brand { font-family: var(--font-display); font-size: clamp(2rem,6vw,4rem); color: transparent; -webkit-text-stroke: 1px rgba(13,92,232,0.2); line-height: 0.95; letter-spacing: 0.04em; text-transform: uppercase; transition: -webkit-text-stroke-color 0.4s; }
+.footer-brand:hover { -webkit-text-stroke-color: var(--blue-light); }
+.footer-links { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+.footer-link { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.12em; color: var(--text3); text-decoration: none; text-transform: uppercase; transition: color 0.3s; }
+.footer-link:hover { color: var(--blue-light); }
+.footer-bottom { display: flex; justify-content: space-between; align-items: center; padding-top: 2rem; border-top: 1px solid rgba(13,92,232,0.08); flex-wrap: wrap; gap: 1rem; }
+.footer-copy, .footer-made { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.15em; color: var(--text3); text-transform: uppercase; }
+.footer-made span { color: var(--blue-light); }
+
+@media (max-width: 860px) { .nav-center, .nav-cta { display: none; } .hamburger { display: flex; } .footer-top { flex-direction: column; align-items: flex-start; } }
+@media (max-width: 480px) { .footer-bottom { flex-direction: column; text-align: center; } }
+
+::selection { background: rgba(13,92,232,0.35); color: #fff; }
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--blue-dim); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: var(--blue); }
+
+/* Vimeo background iframes nos cards */
+.vimeo-bg-wrap { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.vimeo-bg-wrap iframe { position: absolute; top: 50%; left: 50%; width: 177.78%; height: 100%; min-width: 100%; min-height: 56.25vw; transform: translate(-50%, -50%); filter: saturate(0.5) brightness(0.65); transition: filter 0.5s; }
+.work-card:hover .vimeo-bg-wrap iframe,
+.featured-item:hover .vimeo-bg-wrap iframe,
+.featured-main:hover .vimeo-bg-wrap iframe { filter: saturate(1.1) brightness(0.75); }
+
+/* Para vídeos verticais (fashion) nos cards — inverte proporção */
+.vimeo-bg-wrap.vertical iframe { width: 100%; height: 177.78%; min-height: 100%; min-width: 56.25vh; }
+
+/* Vídeos locais nos cards */
+.work-card video, .featured-item video { width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s var(--ease-cinematic), filter 0.5s; filter: saturate(0.5) brightness(0.65); display: block; }
+@media (hover: hover) and (pointer: fine) {
+  .work-card:hover video { transform: scale(1.07); filter: saturate(1.3) brightness(0.85); }
+  .featured-item:hover video { transform: scale(1.06); filter: saturate(1.1) brightness(0.75); }
+}
+
+/* Estilos adicionais */
+.about-photo { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s var(--ease-cinematic), filter 0.6s; }
+.about-frame:hover .about-photo { transform: scale(1.03); filter: saturate(1.05) contrast(1.02); }
+
+.equipment-rotate { position: relative; overflow: hidden; }
+.equipment-rotate .gear-img-photo { transition: transform 0.6s cubic-bezier(0.34, 1.2, 0.64, 1), filter 0.4s; }
+.equipment-rotate:hover .gear-img-photo { transform: rotate(3deg) scale(1.08); filter: brightness(1.02) saturate(1.05); }
+
+@keyframes gentleRotate { 0% { transform: rotate(0deg) scale(1); } 50% { transform: rotate(2deg) scale(1.02); } 100% { transform: rotate(0deg) scale(1); } }
+.gear-card:nth-child(odd) .equipment-rotate .gear-img-photo { animation: gentleRotate 8s ease-in-out infinite; }
+.gear-card:nth-child(even) .equipment-rotate .gear-img-photo { animation: gentleRotate 10s ease-in-out infinite reverse; }
+.gear-card:hover .equipment-rotate .gear-img-photo { animation-play-state: paused; }
+
+.gear-img { background: linear-gradient(135deg, rgba(13,92,232,0.04), rgba(3,6,15,0.4)); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+.gear-card:hover .gear-img::after { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(59,130,246,0.1), transparent); animation: shine 0.6s ease-out; }
+@keyframes shine { to { left: 100%; } }
+
+@media (max-width: 768px) {
+  .gear-img-photo { padding: 1rem; }
+  @keyframes gentleRotate { 0% { transform: rotate(0deg) scale(1); } 50% { transform: rotate(1deg) scale(1.01); } 100% { transform: rotate(0deg) scale(1); } }
+}
+</style>
+</head>
+<body>
+
+<div class="bg-line"></div>
+<div class="bg-line"></div>
+<div class="bg-line"></div>
+<div class="bg-line"></div>
+
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+<div id="scroll-progress"></div>
+
+<div id="loader">
+  <div class="loader-logo">Kayo Caldeira</div>
+  <div class="loader-bar-wrap"><div class="loader-bar-fill" id="loader-fill"></div></div>
+  <div class="loader-pct" id="loader-pct">0%</div>
+</div>
+
+<nav id="main-nav">
+  <a href="#hero" class="nav-logo">K<span>.</span>C</a>
+  <div class="nav-center">
+    <a href="#featured" class="nav-link"><span>Destaque</span></a>
+    <a href="#works" class="nav-link"><span>Works</span></a>
+    <a href="#about" class="nav-link"><span>Sobre</span></a>
+    <a href="#gear" class="nav-link"><span>Equipamentos</span></a>
+    <a href="#services" class="nav-link"><span>Serviços</span></a>
+    <a href="#contact" class="nav-link"><span>Contato</span></a>
+  </div>
+  <button class="nav-cta" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})"><span>Vamos Criar</span></button>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobile-menu">
+  <a href="#featured" onclick="toggleMenu()">Destaque</a>
+  <a href="#works" onclick="toggleMenu()">Works</a>
+  <a href="#about" onclick="toggleMenu()">Sobre</a>
+  <a href="#gear" onclick="toggleMenu()">Equipamentos</a>
+  <a href="#services" onclick="toggleMenu()">Serviços</a>
+  <a href="#contact" onclick="toggleMenu()">Contato</a>
+</div>
+
+<!-- HERO — usando evento1 (1177247596) como background -->
+<section id="hero">
+  <div class="hero-video-container">
+    <iframe
+      src="https://player.vimeo.com/video/1177247596?background=1&autoplay=1&loop=1&muted=1&autopause=0"
+      frameborder="0"
+      allow="autoplay; fullscreen"
+      style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;"
+    ></iframe>
+  </div>
+  <div class="hero-grad"></div>
+  <div class="hero-scanlines"></div>
+  <div class="blue-orb blue-orb-1"></div>
+  <div class="blue-orb blue-orb-2"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Filmmaker &amp; Editor — Belém, PA</div>
+    <h1 class="hero-title">
+      <span class="line"><span class="line-inner">Kayo</span></span>
+      <span class="line"><span class="line-inner">Caldeira</span></span>
+    </h1>
+    <p class="hero-sub">Transformando momentos únicos em filmes inesquecíveis. Casamentos, produções corporativas e conteúdo que faz a diferença.</p>
+    <div class="hero-ctas">
+      <button class="btn-primary" onclick="document.getElementById('works').scrollIntoView({behavior:'smooth'})"><span>Ver Portfolio</span></button>
+      <button class="btn-outline" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Falar Comigo</button>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item"><div class="stat-num" data-count="8">0</div><div class="stat-lbl">Anos de Experiência</div></div>
+      <div class="stat-item"><div class="stat-num" data-count="120">0</div><div class="stat-lbl">Projetos Entregues</div></div>
+      <div class="stat-item"><div class="stat-num" data-count="50">0</div><div class="stat-lbl">Casamentos Filmados</div></div>
+    </div>
+  </div>
+  <div class="hero-scroll-hint"><p>Scroll</p><div class="scroll-arrow"></div></div>
+</section>
+
+<!-- MARQUEE -->
+<div id="clients">
+  <div class="marquee-track">
+    <div class="marquee-row">
+      <span class="marquee-item">Captação de Casamento</span>
+      <span class="marquee-item">Produção de Conteúdo</span>
+      <span class="marquee-item">Edição de Vídeo</span>
+      <span class="marquee-item">Produção Corporativa</span>
+      <span class="marquee-item">DaVinci Resolve</span>
+      <span class="marquee-item">Sony FX30</span>
+      <span class="marquee-item">Gimbal Zhiyun</span>
+      <span class="marquee-item">Fashion Film</span>
+      <span class="marquee-item">Gastronomia</span>
+      <span class="marquee-item">Captação de Casamento</span>
+      <span class="marquee-item">Produção de Conteúdo</span>
+      <span class="marquee-item">Edição de Vídeo</span>
+      <span class="marquee-item">Produção Corporativa</span>
+      <span class="marquee-item">DaVinci Resolve</span>
+      <span class="marquee-item">Sony FX30</span>
+      <span class="marquee-item">Gimbal Zhiyun</span>
+      <span class="marquee-item">Fashion Film</span>
+      <span class="marquee-item">Gastronomia</span>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURED -->
+<section id="featured" style="padding: clamp(4rem,10vw,8rem) 0; background: var(--bg);">
+  <div class="featured-header reveal" style="padding: 0 clamp(1rem,5vw,3rem); margin-bottom: 2.5rem;">
+    <div class="featured-badge"><span>Participações em Destaque</span></div>
+    <h2 class="featured-headline">Trabalhos<em>de Alto Nível</em></h2>
+    <p class="featured-sub">Produções com artistas e personalidades de renome nacional — como diretor, cinegrafista ou editor convidado. Projetos que exigiram o mais alto padrão técnico e criativo.</p>
+  </div>
+  <div class="featured-grid reveal-scale" style="padding: 0 clamp(1rem,5vw,3rem);">
+    <!-- Main featured — fashion1 (1177246950) -->
+    <div class="featured-main" onclick="openModal('Beleza Parawara', 'Produção de alto nível', '1177246950', '9/16')">
+      <div class="vimeo-bg-wrap vertical"><iframe src="https://player.vimeo.com/video/1177246950?background=1&autoplay=1&loop=1&muted=1&autopause=0" frameborder="0" allow="autoplay; fullscreen"></iframe></div>
+      <div class="featured-overlay">
+        <div class="feat-star">Produção Premium</div>
+        <div class="feat-title">Beleza parawara</div>
+        <div class="feat-desc">Direção de fotografia e edição cinematográfica para produção de alto impacto.</div>
+      </div>
+      <div class="feat-play"><svg width="18" height="21" viewBox="0 0 18 21" fill="white"><path d="M0 0l18 10.5L0 21z"/></svg></div>
+    </div>
+    <!-- Side items -->
+    <div class="featured-side">
+      <!-- participacao2 — vídeo local -->
+      <div class="featured-item" onclick="openModalLocal('Participação Premium', 'Produção de alto nível 02', 'data/participacao/participacao2.mp4')">
+        <video autoplay muted loop playsinline preload="metadata"><source src="data/participacao/participacao2.mp4" type="video/mp4"></video>
+        <div class="featured-overlay">
+          <div class="feat-star">Produção Premium</div>
+          <div class="feat-title">Participação 02</div>
+          <div class="feat-desc">Captação e pós-produção com qualidade broadcast.</div>
+        </div>
+        <div class="feat-play"><svg width="14" height="16" viewBox="0 0 14 16" fill="white"><path d="M0 0l14 8L0 16z"/></svg></div>
+      </div>
+      <div class="featured-item" style="background: linear-gradient(135deg, rgba(13,92,232,0.08), var(--bg3)); display:flex; align-items:center; justify-content:center; cursor:default;">
+        <div style="text-align:center; padding:2rem;">
+          <div style="font-family:var(--font-display); font-size:clamp(3rem,6vw,4.5rem); color:transparent; -webkit-text-stroke: 1px rgba(245,158,11,0.3); letter-spacing:0.05em; line-height:1;">100%</div>
+          <div style="font-family:var(--font-mono); font-size:0.6rem; letter-spacing:0.25em; color:var(--text3); text-transform:uppercase; margin-top:0.5rem;">Comprometimento</div>
+          <div style="font-family:var(--font-mono); font-size:0.6rem; letter-spacing:0.25em; color:var(--text3); text-transform:uppercase;">em cada frame</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WORKS -->
+<section id="works">
+  <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:2rem;flex-wrap:wrap;gap:1rem">
+    <div>
+      <div class="section-label reveal"><span>Portfolio Completo</span></div>
+      <h2 class="section-title reveal" style="margin-bottom:0">Trabalhos</h2>
+    </div>
+    <div class="works-filter reveal">
+      <button class="filter-btn active" data-filter="all" onclick="filterWorks('all',this)">Todos</button>
+      <button class="filter-btn" data-filter="afeto" onclick="filterWorks('afeto',this)">Afeto</button>
+      <button class="filter-btn" data-filter="evento" onclick="filterWorks('evento',this)">Eventos</button>
+      <button class="filter-btn" data-filter="fashion" onclick="filterWorks('fashion',this)">Fashion</button>
+      <button class="filter-btn" data-filter="gastronomia" onclick="filterWorks('gastronomia',this)">Gastronomia</button>
+    </div>
+  </div>
+  <div class="works-grid" id="works-grid">
+
+    <!-- AFETO -->
+    <!-- afeto1 = 1177249622 -->
+    <div class="work-card reveal" data-cat="afeto" onclick="openModal('Afeto — Filme de Casal', 'Captação cinematográfica de amor', '1177249622', '16/9')">
+      <div class="work-badge">Afeto</div>
+      <div class="work-play"><svg width="14" height="16" viewBox="0 0 14 16" fill="white"><path d="M0 0l14 8L0 16z"/></svg></div>
+      <div class="vimeo-bg-wrap"><iframe src="https://player.vimeo.com/video/1177249622?background=1&autoplay=1&loop=1&muted=1&autopause=0" frameborder="0" allow="autoplay; fullscreen"></iframe></div>
+      <div class="work-overlay"><div class="work-cat">Casamento &amp; Afeto</div><div class="work-name">Afeto 01</div></div>
+    </div>
+    <!-- afeto2 = 1177249716 -->
+    <div class="work-card reveal" data-cat="afeto" onclick="openModal('Afeto — Filme de Casal', 'Captação cinematográfica de amor 02', '1177249716', '16/9')">
+      <div class="work-badge">Afeto</div>
+      <div class="work-play"><svg width="14" height="16" viewBox="0 0 14 16" fill="white"><path d="M0 0l14 8L0 16z"/></svg></div>
+      <div class="vimeo-bg-wrap"><iframe src="https://player.vimeo.com/video/1177249716?background=1&autoplay=1&loop=1&muted=1&autopause=0" frameborder="0" allow="autoplay; fullscreen"></iframe></div>
+      <div class="work-overlay"><div class="work-cat">Casamento &amp; Afeto</div><div class="work-name">Afeto 02</div></div>
+    </div>
+
+    <!-- EVENTO -->
+    <!-- evento1 = 1177247596 -->
+    <div class="work-card reveal" data-cat="evento" onclick="openModal('Cobertura de Evento', 'Captação profissional de evento 01', '1177247596', '16/9')">
+      <div class="work-badge">Evento</div>
+      <div class="work-play"><svg width="14" height="16" viewBox="0 0 14 16" fill="white"><path d="M0 0l14 8L0 16z"/></svg></div>
+      <div class="vimeo-bg-wrap"><iframe src="https://player.vimeo.com/video/1177247596?background=1&autoplay=1&loop=1&muted=1&autopause=0" frameborder="0" allow="autoplay; fullscreen"></iframe></div>
+      <div class="work-overlay"><div class="work-cat">Cobertura de Evento</div><div class="work-name">Evento 01</div></div>
+    </div>
+    <!-- evento2 = 1177247928 -->
+    <div class="work-card reveal" data-cat="evento" onclick="openModal('Cobertura de Evento', 'Captação profissional de evento 02', '1177247928', '16/9')">
+      <div class="work-badge">Evento</div>
+      <div class="work-play"><svg width="14" height="16" viewBox="0 0 14 16" fill="white"><path d="M0 0l14 8L0 16z"/></svg></div>
+      <div class="vimeo-bg-wrap"><iframe src="https://player.vimeo.com/video/1177247928?background=1&autoplay=1&loop=1&muted=1&autopause=0" frameborder="0" allow="autoplay; fullscreen"></iframe></div>
+      <div class="work-overlay"><div class="work-cat">Cobertura de Evento</div><div class="work-name">Evento 02</div></div>
+    </div>
+    <!-- evento3 = 1177248122 -->
+    <div class="work-card reveal" data-cat="evento" onclick="openModal('Cobertura de Evento', 'Captação profissional de evento 03', '1177248122', '16/9')">
+      <div class="work-badge">Evento</div>
+      <div class="work-play"><svg width="14" height="16" viewBox="0 0 14 16" fill="white"><path d="M0 0l14 8L0 16z"/></svg></div>
+      <div class="vimeo-bg-wrap"><iframe src="https://player.vimeo.com/video/1177248122?background=1&autoplay=1&loop=1&muted=1&autopause=0" frameborder="0" allow="autoplay; fullscreen"></iframe></div>
+      <div class="work-overlay"><div class="work-cat">Cobertura de Evento</div><div class="work-name">Evento 03</div></div>
+    </div>
+    <!-- evento4 = 1177248438 -->
+    <div class="work-card reveal" data-cat="evento" onclick="openModal('Cobertura de Evento', 'Captação profissional de evento 04', '1177248438', '16/9')">
+      <div class="work-badge">Evento</div>
+      <div class="work-play"><svg width="14" height="16" viewBox="0 0 14 16" fill="white"><path d="M0 0l14 8L0 16z"/></svg></div>
+      <div class="vimeo-bg-wrap"><iframe src="https://player.vimeo.com/video/1177248438?background=1&autoplay=1&loop=1&muted=1&autopause=0" frameborder="0" allow="autoplay; fullscreen"></iframe></div>
+      <div class="work-overlay"><div class="work-cat">Cobertura de Evento</div><div class="work-name">Evento 04</div></div>
+    </div>
+
+    <!-- FASHION -->
+    <!-- fashion1 = 1177246950 -->
+    <div class="work-card reveal" data-cat="fashion" onclick="openModal('Fashion Film', 'Direção criativa e edição de moda 01', '1177246950', '9/16')">
+      <div class="work-badge">Fashion</div>
+      <div class="work-play"><svg width="14" height="16" viewBox="0 0 14 16" fill="white"><path d="M0 0l14 8L0 16z"/></svg></div>
+      <div class="vimeo-bg-wrap vertical"><iframe src="https://player.vimeo.com/video/1177246950?background=1&autoplay=1&loop=1&muted=1&autopause=0" frameborder="0" allow="autoplay; fullscreen"></iframe></div>
+      <div class="work-overlay"><div class="work-cat">Fashion Film</div><div class="work-name">Fashion 01</div></div>
+    </div>
+    <!-- fashion2 = 1177247165 -->
+    <div class="work-card reveal" data-cat="fashion" onclick="openModal('Fashion Film', 'Direção criativa e edição de moda 02', '1177247165', '9/16')">
+      <div class="work-badge">Fashion</div>
+      <div class="work-play"><svg width="14" height="16" viewBox="0 0 14 16" fill="white"><path d="M0 0l14 8L0 16z"/></svg></div>
+      <div class="vimeo-bg-wrap vertical"><iframe src="https://player.vimeo.com/video/1177247165?background=1&autoplay=1&loop=1&muted=1&autopause=0" frameborder="0" allow="autoplay; fullscreen"></iframe></div>
+      <div class="work-overlay"><div class="work-cat">Fashion Film</div><div class="work-name">Fashion 02</div></div>
+    </div>
+
+    <!-- GASTRONOMIA — vídeos locais -->
+    <div class="work-card reveal" data-cat="gastronomia" onclick="openModalLocal('Gastronomia', 'Vídeo gastronômico cinematográfico 01', 'data/gastronomia/gastronomia1.mov')">
+      <div class="work-badge">Gastronomia</div>
+      <div class="work-play"><svg width="14" height="16" viewBox="0 0 14 16" fill="white"><path d="M0 0l14 8L0 16z"/></svg></div>
+      <video autoplay muted loop playsinline preload="metadata"><source src="data/gastronomia/gastronomia1.mov" type="video/mp4"></video>
+      <div class="work-overlay"><div class="work-cat">Gastronomia</div><div class="work-name">Gastro 01</div></div>
+    </div>
+    <div class="work-card reveal" data-cat="gastronomia" onclick="openModalLocal('Gastronomia', 'Vídeo gastronômico cinematográfico 02', 'data/gastronomia/gastronomia2.mov')">
+      <div class="work-badge">Gastronomia</div>
+      <div class="work-play"><svg width="14" height="16" viewBox="0 0 14 16" fill="white"><path d="M0 0l14 8L0 16z"/></svg></div>
+      <video autoplay muted loop playsinline preload="metadata"><source src="data/gastronomia/gastronomia2.mov" type="video/mp4"></video>
+      <div class="work-overlay"><div class="work-cat">Gastronomia</div><div class="work-name">Gastro 02</div></div>
+    </div>
+    <div class="work-card reveal" data-cat="gastronomia" onclick="openModalLocal('Gastronomia', 'Vídeo gastronômico cinematográfico 03', 'data/gastronomia/gastronomia3.mov')">
+      <div class="work-badge">Gastronomia</div>
+      <div class="work-play"><svg width="14" height="16" viewBox="0 0 14 16" fill="white"><path d="M0 0l14 8L0 16z"/></svg></div>
+      <video autoplay muted loop playsinline preload="metadata"><source src="data/gastronomia/gastronomia3.mov" type="video/mp4"></video>
+      <div class="work-overlay"><div class="work-cat">Gastronomia</div><div class="work-name">Gastro 03</div></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PARALLAX TEXT -->
+<div style="overflow:hidden;padding:4rem 0;background:var(--bg);border-top:1px solid rgba(13,92,232,0.08)">
+  <span id="par-text" style="font-family:var(--font-display);font-size:clamp(2.5rem,8vw,7rem);white-space:nowrap;display:block;color:transparent;-webkit-text-stroke:1px rgba(13,92,232,0.15)">CINEMA · EMOÇÃO · HISTÓRIA · BELÉM · CASAMENTO · FASHION · GASTRONOMIA · DAVINCI ·&nbsp;&nbsp;&nbsp;CINEMA · EMOÇÃO · HISTÓRIA · BELÉM · CASAMENTO · FASHION · GASTRONOMIA · DAVINCI ·&nbsp;&nbsp;&nbsp;</span>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-visual reveal-left">
+    <div class="about-frame">
+      <img src="data/kayo.jpeg" alt="Kayo Caldeira - Filmmaker e Editor" class="about-photo">
+      <div class="about-tag">Belém, PA — Brasil</div>
+    </div>
+    <div class="about-deco"></div>
+  </div>
+  <div class="reveal-right">
+    <div class="section-label"><span>Sobre</span></div>
+    <h2 class="section-title">A Visão Por Trás das Câmeras</h2>
+    <div class="about-text">
+      <p>Sou <strong>Kayo Caldeira</strong>, filmmaker e editor de vídeo baseado em Belém do Pará. Com mais de 4 anos de experiência, especializo em captação de casamentos, produções corporativas, fashion films, gastronomia e criação de conteúdo digital de alto impacto.</p>
+      <p>Atuo como <strong>freelancer</strong> e colaborador em produções de nível nacional — já participei de projetos com artistas e personalidades de grande visibilidade, onde fui responsável pela captação, direção de fotografia ou edição final.</p>
+      <p>Acredito que cada frame é uma decisão criativa. Meu processo vai do briefing ao delivery, com atenção obsessiva a luz, movimento, ritmo de edição e cor — tudo calibrado para o resultado que o cliente e a produção merecem.</p>
+    </div>
+    <div class="workflow-badge"><span>Pós-Produção com DaVinci Resolve Studio</span></div>
+    <div class="skills-row">
+      <span class="skill-tag">Captação de Casamento</span>
+      <span class="skill-tag">Produção Corporativa</span>
+      <span class="skill-tag">Fashion Film</span>
+      <span class="skill-tag">Gastronomia</span>
+      <span class="skill-tag">Edição de Vídeo</span>
+      <span class="skill-tag">Color Grading</span>
+      <span class="skill-tag">Conteúdo Digital</span>
+      <span class="skill-tag">Direção de Fotografia</span>
+    </div>
+  </div>
+</section>
+
+<!-- GEAR -->
+<section id="gear">
+  <div class="section-label reveal"><span>Arsenal Técnico</span></div>
+  <h2 class="section-title reveal">Equipamentos</h2>
+  <p class="gear-intro reveal">Todo trabalho de excelência começa com as ferramentas certas. Abaixo estão os equipamentos que uso para entregar resultados de nível profissional — do set de filmagem à pós-produção.</p>
+
+  <div class="gear-grid">
+    <div class="gear-card reveal">
+      <div class="gear-img equipment-rotate">
+        <img src="data/equipamentos/camera.png" alt="Sony FX30" class="gear-img-photo">
+      </div>
+      <div class="gear-body">
+        <div class="gear-cat">Câmera Principal</div>
+        <div class="gear-name">Sony FX30</div>
+        <p class="gear-desc">Câmera cinema com sensor APS-C de 26MP, gravação 4K120fps, perfis S-Cinetone e S-Log3 para máximo range dinâmico em pós-produção.</p>
+        <div class="gear-spec"><span>4K 120fps</span><span>S-Log3</span><span>APS-C</span><span>26MP</span></div>
+      </div>
+    </div>
+    <div class="gear-card reveal">
+      <div class="gear-img equipment-rotate">
+        <img src="data/equipamentos/lente.png" alt="Zeiss 16-70mm f/4.0" class="gear-img-photo">
+      </div>
+      <div class="gear-body">
+        <div class="gear-cat">Óptica Principal</div>
+        <div class="gear-name">Zeiss 16–70mm f/4.0</div>
+        <p class="gear-desc">Lente zoom de alta resolução com óptica Zeiss T* coating. Versatilidade total do grande angular ao telefoto com abertura constante.</p>
+        <div class="gear-spec"><span>16–70mm</span><span>f/4.0</span><span>OSS</span><span>Zeiss T*</span></div>
+      </div>
+    </div>
+    <div class="gear-card reveal">
+      <div class="gear-img equipment-rotate">
+        <img src="data/equipamentos/gimbal.png" alt="Zhiyun Cinepper" class="gear-img-photo">
+      </div>
+      <div class="gear-body">
+        <div class="gear-cat">Estabilização</div>
+        <div class="gear-name">Zhiyun Cinepper</div>
+        <p class="gear-desc">Gimbal de 3 eixos com algoritmo de estabilização de última geração. Movimentos fluidos e cinematográficos em qualquer terreno.</p>
+        <div class="gear-spec"><span>3 Eixos</span><span>4.5kg payload</span><span>12h bateria</span></div>
+      </div>
+    </div>
+    <div class="gear-card reveal">
+      <div class="gear-img equipment-rotate">
+        <img src="data/equipamentos/macbook.png" alt="MacBook M2" class="gear-img-photo">
+      </div>
+      <div class="gear-body">
+        <div class="gear-cat">Estação de Edição</div>
+        <div class="gear-name">MacBook M2</div>
+        <p class="gear-desc">Chip Apple M2 com Neural Engine para renderização acelerada em DaVinci Resolve. 4K e 8K em tempo real sem proxies.</p>
+        <div class="gear-spec"><span>Apple M2</span><span>16GB RAM</span><span>512GB SSD</span></div>
+      </div>
+    </div>
+    <div class="gear-card reveal">
+      <div class="gear-img equipment-rotate">
+        <img src="data/equipamentos/microfone.png" alt="Microfone Lapela Sem Fio" class="gear-img-photo">
+      </div>
+      <div class="gear-body">
+        <div class="gear-cat">Áudio Profissional</div>
+        <div class="gear-name">Microfone Lapela Sem Fio</div>
+        <p class="gear-desc">Sistema sem fio para captação de áudio limpo em ambientes externos e internos. Essencial para produções corporativas e cerimônias.</p>
+        <div class="gear-spec"><span>Sem Fio</span><span>Duplo Canal</span><span>Baixo Ruído</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="davinci-block reveal">
+    <div class="davinci-icon"><span>DR</span></div>
+    <div>
+      <div class="davinci-label">Software de Pós-Produção</div>
+      <div class="davinci-title">DaVinci Resolve Studio</div>
+      <p class="davinci-desc">Toda a edição, color grading e masterização é realizada no <strong>DaVinci Resolve Studio</strong> — o padrão da indústria cinematográfica mundial. Utilizo os nós de cor para grading técnico e criativo com precisão de nível profissional: primárias, secundárias, masks, qualifiers e LUTs customizadas. O resultado é uma identidade visual coesa e cinematográfica em cada projeto.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="services-inner">
+    <div class="section-label reveal"><span>O Que Ofereço</span></div>
+    <h2 class="section-title reveal">Serviços</h2>
+  </div>
+  <div class="h-scroll" id="h-scroll">
+    <div class="h-track">
+      <div class="svc-card reveal"><div class="svc-num">01</div><div class="svc-title">Captação de Casamentos</div><p class="svc-desc">Do buquê ao primeiro beijo como casados — cada emoção filmada com sensibilidade cinematográfica e entregue com color grading exclusivo.</p></div>
+      <div class="svc-card reveal"><div class="svc-num">02</div><div class="svc-title">Produção Corporativa</div><p class="svc-desc">Vídeos institucionais, eventos empresariais e treinamentos. Conteúdo profissional que representa a sua marca com impacto.</p></div>
+      <div class="svc-card reveal"><div class="svc-num">03</div><div class="svc-title">Fashion Film</div><p class="svc-desc">Direção criativa e captação de moda com estética editorial. Movimento, luz e styling alinhados para comunicar a essência da marca.</p></div>
+      <div class="svc-card reveal"><div class="svc-num">04</div><div class="svc-title">Gastronomia</div><p class="svc-desc">Vídeos que fazem o espectador sentir o sabor pela tela. Iluminação especializada e timing de edição para despertar o apetite.</p></div>
+      <div class="svc-card reveal"><div class="svc-num">05</div><div class="svc-title">Edição & Color</div><p class="svc-desc">Pós-produção completa no DaVinci Resolve Studio com color grading cinematográfico, trilha sonora e masterização para qualquer plataforma.</p></div>
+      <div class="svc-card reveal"><div class="svc-num">06</div><div class="svc-title">Conteúdo Digital</div><p class="svc-desc">Reels, Shorts e conteúdo para redes sociais otimizado para engajamento. Formato vertical e horizontal para todas as plataformas.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="reveal-left">
+    <div class="section-label"><span>Contato</span></div>
+    <h2 class="contact-head">Vamos <em>Criar</em></h2>
+    <p class="contact-desc">Pronto para transformar seus momentos em cinema? Fale comigo sobre seu projeto, data e orçamento. Atendo em todo o Pará e viajo para projetos especiais.</p>
+    <div class="contact-list">
+      <div class="contact-row"><span class="c-row-lbl">WhatsApp / Telefone</span><span class="c-row-val"><a href="https://wa.me/5591985065564" target="_blank">+55 (91) 98506-5564</a></span></div>
+      <div class="contact-row"><span class="c-row-lbl">Email</span><span class="c-row-val"><a href="mailto:kayocaldeira@email.com">kayocaldeira@email.com</a></span></div>
+      <div class="contact-row"><span class="c-row-lbl">Localização</span><span class="c-row-val">Belém, Pará — Brasil</span></div>
+      <div class="contact-row"><span class="c-row-lbl">Disponibilidade</span><span class="c-row-val">Aberto a projetos em todo o Pará e viagens</span></div>
+      <div class="contact-row"><span class="c-row-lbl">Nível</span><span class="c-row-val">Profissional — disponível para contratação CLT ou PJ</span></div>
+    </div>
+    <div class="socials">
+      <a href="https://instagram.com" target="_blank" class="social-btn">Instagram</a>
+      <a href="https://youtube.com" target="_blank" class="social-btn">YouTube</a>
+      <a href="https://wa.me/5591985065564" target="_blank" class="social-btn">WhatsApp</a>
+    </div>
+  </div>
+  <div class="reveal-right">
+    <form class="contact-form" onsubmit="handleContact(event)">
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Seu Nome</label><input type="text" class="form-input" required id="cf-name"></div>
+        <div class="form-group"><label class="form-label">Telefone</label><input type="tel" class="form-input" id="cf-tel"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input" required id="cf-email"></div>
+      <div class="form-group"><label class="form-label">Tipo de Projeto</label>
+        <select class="form-input form-select" id="cf-type">
+          <option value="">Selecione</option>
+          <option>Casamento</option><option>Pré-Wedding</option><option>Produção Corporativa</option>
+          <option>Fashion Film</option><option>Gastronomia</option><option>Conteúdo Digital</option>
+          <option>Edição / Color</option><option>Oportunidade de Emprego</option><option>Outro</option>
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">Data do Evento / Início</label><input type="date" class="form-input" id="cf-date"></div>
+      <div class="form-group"><label class="form-label">Mensagem</label><textarea class="form-textarea" placeholder="Conte sobre seu projeto, vaga ou oportunidade..." id="cf-msg"></textarea></div>
+      <button type="submit" class="submit-btn"><span>Enviar Mensagem</span></button>
+      <div class="form-msg" id="cf-msg-status"></div>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">Kayo<br>Caldeira</div>
+    <div class="footer-links">
+      <a href="#featured" class="footer-link">Destaque</a>
+      <a href="#works" class="footer-link">Works</a>
+      <a href="#about" class="footer-link">Sobre</a>
+      <a href="#gear" class="footer-link">Equipamentos</a>
+      <a href="#services" class="footer-link">Serviços</a>
+      <a href="#contact" class="footer-link">Contato</a>
+      <a href="https://instagram.com" class="footer-link">Instagram</a>
+      <a href="https://youtube.com" class="footer-link">YouTube</a>
+      <a href="https://wa.me/5591985065564" class="footer-link">WhatsApp</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">© 2024 Kayo Caldeira — Todos os Direitos Reservados</p>
+    <p class="footer-made">Filmmaker · Editor · <span>DaVinci Resolve</span> · Belém, PA</p>
+  </div>
+</footer>
+
+<!-- VIDEO MODAL — reprodução via iframe Vimeo -->
+<div id="video-modal">
+  <div class="modal-wrap">
+    <div class="modal-header">
+      <div class="modal-title" id="modal-title">Projeto</div>
+      <button class="modal-close" onclick="closeModal()">✕ Fechar</button>
+    </div>
+    <div class="video-frame" id="modal-frame">
+      <!-- iframe inserido dinamicamente via JS -->
+    </div>
+  </div>
+</div>
+
+<script>
+// ---- IDs Vimeo mapeados ----
+// evento1=1177247596, evento2=1177247928, evento3=1177248122, evento4=1177248438
+// fashion1=1177246950, fashion2=1177247165
+// afeto1=1177249622, afeto2=1177249716
+
+function toggleMenu(){
+  document.getElementById('hamburger').classList.toggle('open');
+  document.getElementById('mobile-menu').classList.toggle('open');
+  document.body.style.overflow = document.getElementById('mobile-menu').classList.contains('open') ? 'hidden' : '';
+}
+
+function closeModal(){
+  document.getElementById('video-modal').classList.remove('open');
+  document.getElementById('modal-frame').innerHTML = ''; // remove iframe para parar o vídeo
+  document.body.style.overflow = '';
+}
+
+function openModal(title, sub, vimeoId, aspectRatio){
+  document.getElementById('modal-title').textContent = title + ' — ' + sub;
+
+  // Ajusta aspect-ratio do frame para vídeos verticais (fashion)
+  const frame = document.getElementById('modal-frame');
+  const isVertical = aspectRatio && aspectRatio.startsWith('9');
+  frame.style.aspectRatio = isVertical ? '9/16' : '16/9';
+  frame.style.maxHeight = isVertical ? '80vh' : '';
+  frame.style.margin = isVertical ? '0 auto' : '';
+  frame.style.maxWidth = isVertical ? 'calc(80vh * 9/16)' : '';
+
+  // Insere iframe Vimeo com autoplay
+  frame.innerHTML = `<iframe
+    src="https://player.vimeo.com/video/${vimeoId}?autoplay=1&badge=0&autopause=0&player_id=0&app_id=58479"
+    frameborder="0"
+    allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media"
+    style="width:100%;height:100%;border:none;"
+    title="${title}"
+  ></iframe>`;
+
+  document.getElementById('video-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+// Modal para vídeos locais (sem Vimeo)
+function openModalLocal(title, sub, src){
+  document.getElementById('modal-title').textContent = title + ' — ' + sub;
+  const frame = document.getElementById('modal-frame');
+  frame.style.aspectRatio = '16/9';
+  frame.style.maxHeight = '';
+  frame.style.margin = '';
+  frame.style.maxWidth = '';
+  frame.innerHTML = `<video controls autoplay style="width:100%;height:100%;object-fit:contain;background:#000;">
+    <source src="${src}" type="video/mp4">
+  </video>`;
+  document.getElementById('video-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function filterWorks(cat, btn){
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.work-card').forEach(card => {
+    const show = cat === 'all' || card.dataset.cat === cat;
+    card.style.opacity = show ? '1' : '0.3';
+    card.style.pointerEvents = show ? 'auto' : 'none';
+    card.style.filter = show ? 'blur(0)' : 'blur(2px)';
+    card.style.transition = 'opacity 0.4s, filter 0.4s';
+  });
+}
+
+async function handleContact(e){
+  e.preventDefault();
+  const btn = e.target.querySelector('.submit-btn');
+  const status = document.getElementById('cf-msg-status');
+  const originalText = btn.querySelector('span').textContent;
+  btn.querySelector('span').textContent = 'Enviando...';
+  btn.disabled = true;
+  await new Promise(r => setTimeout(r, 1500));
+  status.className = 'form-msg success';
+  status.textContent = '✓ Mensagem enviada! Retorno em até 24h.';
+  e.target.reset();
+  setTimeout(() => {
+    btn.querySelector('span').textContent = originalText;
+    btn.disabled = false;
+    status.style.display = 'none';
+    status.className = 'form-msg';
+    status.textContent = '';
+  }, 4000);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  let pct = 0;
+  const fill = document.getElementById('loader-fill');
+  const pctEl = document.getElementById('loader-pct');
+  const intv = setInterval(() => {
+    pct = Math.min(pct + Math.random() * 10 + 2, 100);
+    fill.style.width = pct + '%';
+    pctEl.textContent = Math.floor(pct) + '%';
+    if(pct >= 100){
+      clearInterval(intv);
+      setTimeout(() => {
+        document.getElementById('loader').classList.add('hidden');
+        document.querySelectorAll('.stat-num[data-count]').forEach(el => {
+          const target = parseInt(el.dataset.count);
+          let cur = 0;
+          const step = Math.ceil(target / 40);
+          const counter = setInterval(() => {
+            cur = Math.min(cur + step, target);
+            el.textContent = cur + (target > 10 ? '+' : '');
+            if(cur >= target) clearInterval(counter);
+          }, 30);
+        });
+      }, 300);
+    }
+  }, 80);
+});
+
+const revealObserver = new IntersectionObserver((entries) =>
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }),
+  { threshold: 0.1, rootMargin: '0px 0px -30px 0px' }
+);
+document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale').forEach(el => revealObserver.observe(el));
+
+window.addEventListener('scroll', () => {
+  const scrolled = window.scrollY;
+  const progress = scrolled / (document.documentElement.scrollHeight - window.innerHeight);
+  document.getElementById('scroll-progress').style.transform = `scaleX(${progress})`;
+  document.getElementById('main-nav').classList.toggle('scrolled', scrolled > 60);
+  const parText = document.getElementById('par-text');
+  if(parText) parText.style.transform = `translateX(-${scrolled * 0.2}px)`;
+});
+
+const hScroll = document.getElementById('h-scroll');
+if(hScroll){
+  let isDown = false, startX, scrollLeft;
+  hScroll.addEventListener('mousedown', e => { isDown = true; startX = e.pageX - hScroll.offsetLeft; scrollLeft = hScroll.scrollLeft; hScroll.style.cursor = 'grabbing'; });
+  hScroll.addEventListener('mouseleave', () => { isDown = false; hScroll.style.cursor = 'grab'; });
+  hScroll.addEventListener('mouseup', () => { isDown = false; hScroll.style.cursor = 'grab'; });
+  hScroll.addEventListener('mousemove', e => { if(!isDown) return; e.preventDefault(); const x = e.pageX - hScroll.offsetLeft; hScroll.scrollLeft = scrollLeft - (x - startX) * 1.5; });
+}
+
+document.addEventListener('keydown', e => { if(e.key === 'Escape') closeModal(); });
+
+// Fechar modal ao clicar fora do conteúdo
+document.getElementById('video-modal').addEventListener('click', function(e){
+  if(e.target === this) closeModal();
+});
+
+if(window.matchMedia('(pointer: fine)').matches){
+  const cursorDot = document.getElementById('cursor-dot');
+  const cursorRing = document.getElementById('cursor-ring');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursorDot.style.left = mx + 'px'; cursorDot.style.top = my + 'px';
+  });
+  function animateCursor(){
+    rx += (mx - rx) * 0.1; ry += (my - ry) * 0.1;
+    cursorRing.style.left = rx + 'px'; cursorRing.style.top = ry + 'px';
+    requestAnimationFrame(animateCursor);
+  }
+  animateCursor();
+  document.querySelectorAll('a, button, .work-card, .svc-card, .gear-card, .showreel-wrapper, .nav-link, .featured-item, .featured-main').forEach(el => {
+    el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+    el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+  });
+  document.querySelectorAll('.work-card, .featured-item, .featured-main').forEach(el => {
+    el.addEventListener('mouseenter', () => { document.body.classList.remove('cursor-hover'); document.body.classList.add('cursor-video'); });
+    el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-video'));
+  });
+}
+</script>
+</body>
+</html>
