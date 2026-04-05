@@ -508,7 +508,7 @@ footer { background: var(--bg); border-top: 1px solid rgba(13,92,232,0.1); paddi
         <video autoplay muted loop playsinline preload="metadata"><source src="data/participacao/participacao2.mp4" type="video/mp4"></video>
         <div class="featured-overlay">
           <div class="feat-star">Produção Premium</div>
-          <div class="feat-title">Participação 02</div>
+          <div class="feat-title">Show do ALOK</div>
           <div class="feat-desc">Captação e pós-produção com qualidade broadcast.</div>
         </div>
         <div class="feat-play"><svg width="14" height="16" viewBox="0 0 14 16" fill="white"><path d="M0 0l14 8L0 16z"/></svg></div>
@@ -695,6 +695,19 @@ footer { background: var(--bg); border-top: 1px solid rgba(13,92,232,0.1); paddi
         <div class="gear-spec"><span>16–70mm</span><span>f/4.0</span><span>OSS</span><span>Zeiss T*</span></div>
       </div>
     </div>
+
+    <div class="gear-card reveal">
+      <div class="gear-img equipment-rotate">
+        <img src="data/equipamentos/lente2.png" alt="Zeiss 16-70mm f/4.0" class="gear-img-photo">
+      </div>
+      <div class="gear-body">
+        <div class="gear-cat">Óptica Principal</div>
+        <div class="gear-name">Vitrox 23mm F1.4</div>
+        <p class="gear-desc">Lente zoom de alta resolução com óptica Vitrox. Versatilidade total do grande angular ao telefoto com abertura constante.</p>
+        <div class="gear-spec"><span>23mm</span><span>f/1.4</span><span>Vitrox</span></div>
+      </div>
+    </div>
+
     <div class="gear-card reveal">
       <div class="gear-img equipment-rotate">
         <img src="data/equipamentos/gimbal.png" alt="Zhiyun Cinepper" class="gear-img-photo">
@@ -759,6 +772,7 @@ footer { background: var(--bg); border-top: 1px solid rgba(13,92,232,0.1); paddi
 </section>
 
 <!-- CONTACT -->
+<!-- CONTACT -->
 <section id="contact">
   <div class="reveal-left">
     <div class="section-label"><span>Contato</span></div>
@@ -773,32 +787,118 @@ footer { background: var(--bg); border-top: 1px solid rgba(13,92,232,0.1); paddi
     </div>
     <div class="socials">
       <a href="https://instagram.com" target="_blank" class="social-btn">Instagram</a>
-      <a href="https://youtube.com" target="_blank" class="social-btn">YouTube</a>
       <a href="https://wa.me/5591985065564" target="_blank" class="social-btn">WhatsApp</a>
     </div>
   </div>
+
   <div class="reveal-right">
-    <form class="contact-form" onsubmit="handleContact(event)">
+    <!-- ✅ Netlify Forms: atributos netlify + name são obrigatórios -->
+    <form
+      class="contact-form"
+      name="contato-kayo"
+      method="POST"
+      data-netlify="true"
+      netlify-honeypot="bot-field"
+      id="contact-form"
+    >
+      <!-- Campo oculto obrigatório pelo Netlify -->
+      <input type="hidden" name="form-name" value="contato-kayo" />
+
+      <!-- Honeypot anti-spam (escondido via CSS) -->
+      <p class="hidden-field" style="display:none">
+        <label>Não preencha: <input name="bot-field" /></label>
+      </p>
+
       <div class="form-row">
-        <div class="form-group"><label class="form-label">Seu Nome</label><input type="text" class="form-input" required id="cf-name"></div>
-        <div class="form-group"><label class="form-label">Telefone</label><input type="tel" class="form-input" id="cf-tel"></div>
+        <div class="form-group">
+          <label class="form-label" for="cf-name">Seu Nome</label>
+          <input type="text" class="form-input" name="nome" id="cf-name" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="cf-tel">Telefone</label>
+          <input type="tel" class="form-input" name="telefone" id="cf-tel" />
+        </div>
       </div>
-      <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input" required id="cf-email"></div>
-      <div class="form-group"><label class="form-label">Tipo de Projeto</label>
-        <select class="form-input form-select" id="cf-type">
+
+      <div class="form-group">
+        <label class="form-label" for="cf-email">Email</label>
+        <input type="email" class="form-input" name="email" id="cf-email" required />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="cf-type">Tipo de Projeto</label>
+        <select class="form-input form-select" name="tipo-projeto" id="cf-type">
           <option value="">Selecione</option>
-          <option>Casamento</option><option>Pré-Wedding</option><option>Produção Corporativa</option>
-          <option>Fashion Film</option><option>Gastronomia</option><option>Conteúdo Digital</option>
-          <option>Edição / Color</option><option>Oportunidade de Emprego</option><option>Outro</option>
+          <option>Casamento</option>
+          <option>Pré-Wedding</option>
+          <option>Produção Corporativa</option>
+          <option>Fashion Film</option>
+          <option>Gastronomia</option>
+          <option>Conteúdo Digital</option>
+          <option>Edição / Color</option>
+          <option>Oportunidade de Emprego</option>
+          <option>Outro</option>
         </select>
       </div>
-      <div class="form-group"><label class="form-label">Data do Evento / Início</label><input type="date" class="form-input" id="cf-date"></div>
-      <div class="form-group"><label class="form-label">Mensagem</label><textarea class="form-textarea" placeholder="Conte sobre seu projeto, vaga ou oportunidade..." id="cf-msg"></textarea></div>
-      <button type="submit" class="submit-btn"><span>Enviar Mensagem</span></button>
+
+      <div class="form-group">
+        <label class="form-label" for="cf-date">Data do Evento / Início</label>
+        <input type="date" class="form-input" name="data-evento" id="cf-date" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="cf-msg">Mensagem</label>
+        <textarea class="form-textarea" name="mensagem" id="cf-msg" placeholder="Conte sobre seu projeto, vaga ou oportunidade..."></textarea>
+      </div>
+
+      <button type="submit" class="submit-btn" id="submit-btn">
+        <span>Enviar Mensagem</span>
+      </button>
+
       <div class="form-msg" id="cf-msg-status"></div>
     </form>
   </div>
 </section>
+
+<script>
+  const form = document.getElementById('contact-form');
+  const statusEl = document.getElementById('cf-msg-status');
+  const submitBtn = document.getElementById('submit-btn');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    // Estado de loading
+    submitBtn.disabled = true;
+    submitBtn.querySelector('span').textContent = 'Enviando...';
+    statusEl.className = 'form-msg';
+    statusEl.textContent = '';
+
+    const formData = new FormData(form);
+
+    try {
+      const response = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(formData).toString(),
+      });
+
+      if (response.ok) {
+        statusEl.className = 'form-msg success';
+        statusEl.textContent = '✅ Mensagem enviada! Entrarei em contato em breve.';
+        form.reset();
+      } else {
+        throw new Error('Erro na resposta do servidor');
+      }
+    } catch (err) {
+      statusEl.className = 'form-msg error';
+      statusEl.textContent = '❌ Algo deu errado. Tente pelo WhatsApp ou email diretamente.';
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.querySelector('span').textContent = 'Enviar Mensagem';
+    }
+  });
+</script>
 
 <footer>
   <div class="footer-top">
@@ -811,7 +911,6 @@ footer { background: var(--bg); border-top: 1px solid rgba(13,92,232,0.1); paddi
       <a href="#services" class="footer-link">Serviços</a>
       <a href="#contact" class="footer-link">Contato</a>
       <a href="https://instagram.com" class="footer-link">Instagram</a>
-      <a href="https://youtube.com" class="footer-link">YouTube</a>
       <a href="https://wa.me/5591985065564" class="footer-link">WhatsApp</a>
     </div>
   </div>
