@@ -13,7 +13,15 @@
     ],
     "disown-opener": "off",
     "no-inline-styles": "off",
-    "axe/text-alternatives": "off"
+    "axe/text-alternatives": "off",
+    "compat-api/html": [
+      "default",
+      {
+        "ignore": [
+          "meta[name=theme-color]"
+        ]
+      }
+    ]
   },
   "browserslist": [
     "defaults",

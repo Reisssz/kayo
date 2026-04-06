@@ -1,0 +1,98 @@
+# =============================================
+# netlify.toml — Kayo Caldeira Portfolio
+# Segurança, performance e deploy config
+# =============================================
+
+# Build settings
+[build]
+  publish = "."
+  command = ""
+
+# =============================================
+# HEADERS DE SEGURANÇA — aplicados em todas as rotas
+# =============================================
+[[headers]]
+  for = "/*"
+  [headers.values]
+    # Bloqueia clickjacking — site não pode ser embutido em iframes externos
+    X-Frame-Options = "SAMEORIGIN"
+
+    # Impede MIME sniffing — browser deve respeitar o Content-Type declarado
+    X-Content-Type-Options = "nosniff"
+
+    # XSS Protection — legacy browsers (Chrome/Edge modernos ignoram, mas não prejudica)
+    X-XSS-Protection = "1; mode=block"
+
+    # HSTS — força HTTPS por 1 ano, inclui subdomínios
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
+
+    # Referrer controlado — envia origin apenas em HTTPS
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+    # Permissions Policy — desativa APIs de hardware desnecessárias
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(), payment=(), usb=(), bluetooth=()"
+
+    # Content Security Policy
+    # - default-src 'self': apenas recursos do próprio domínio por padrão
+    # - script-src 'unsafe-inline': necessário para os scripts inline do site
+    # - style-src: permite estilos inline + Google Fonts
+    # - font-src: Google Fonts
+    # - frame-src: apenas player.vimeo.com para os iframes de vídeo
+    # - img-src: self + data URIs (SVG inline) + Vimeo CDN para thumbnails
+    # - connect-src: Netlify API para o formulário + Vimeo
+    # - media-src: blobs para vídeos locais
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; frame-src https://player.vimeo.com; img-src 'self' data: https://i.vimeocdn.com https://f.vimeocdn.com; connect-src 'self' https://api.netlify.com https://vimeo.com https://fresnel.vimeocdn.com; media-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self';"
+
+# =============================================
+# CACHE — assets estáticos com cache longo
+# =============================================
+
+# HTML — sem cache (sempre fresh)
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# Imagens — cache de 1 ano
+[[headers]]
+  for = "/data/equipamentos/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/data/*.jpeg"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/data/*.webp"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/data/*.png"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Ícone — cache de 1 semana
+[[headers]]
+  for = "/data/icon1.png"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+# =============================================
+# REDIRECTS — HTTPS obrigatório (Netlify já faz
+# isso automaticamente, mas explicitando)
+# =============================================
+[[redirects]]
+  from = "http://kayocaldeira.com/*"
+  to = "https://kayocaldeira.com/:splat"
+  status = 301
+  force = true
+
+# Redirect www → non-www (ajuste o domínio conforme o real)
+[[redirects]]
+  from = "https://www.kayocaldeira.com/*"
+  to = "https://kayocaldeira.com/:splat"
+  status = 301
+  force = true
