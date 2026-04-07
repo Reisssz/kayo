@@ -52,20 +52,14 @@
 }
 
 html{scroll-behavior:smooth;overflow-x:hidden}
-/* body{background:var(--bg);color:var(--text);font-family:var(--font-body);overflow-x:hidden;cursor:none} */
 body{background:var(--bg);color:var(--text);font-family:var(--font-body);overflow-x:hidden;cursor:auto}
 
 /* =============================================
-   CURSOR (apenas pointer: fine / desktop)
+   CURSOR (desabilitado - cursor normal)
    ============================================= */
-@media(pointer:fine){
-  #cursor-dot{width:6px;height:6px;background:#fff;border-radius:50%;position:fixed;top:0;left:0;transform:translate(-50%,-50%);pointer-events:none;z-index:9999;transition:transform .08s,background .3s}
-  #cursor-ring{width:36px;height:36px;border:1px solid rgba(93,161,251,.5);border-radius:50%;position:fixed;top:0;left:0;transform:translate(-50%,-50%);pointer-events:none;z-index:9999;transition:width .4s var(--ease-bounce),height .4s var(--ease-bounce),border-color .3s,opacity .3s}
-  body.cursor-hover #cursor-ring{width:60px;height:60px;border-color:var(--blue-light);opacity:.7}
-  body.cursor-video #cursor-ring{width:80px;height:80px;border-color:var(--blue-light);opacity:.9}
-  body.cursor-video #cursor-dot{background:var(--blue-light);transform:translate(-50%,-50%) scale(2)}
+#cursor-dot, #cursor-ring {
+  display: none !important;
 }
-@media(pointer:coarse){body{cursor:auto}#cursor-dot,#cursor-ring{display:none}}
 
 /* =============================================
    NOISE OVERLAY
@@ -275,7 +269,7 @@ section{padding:clamp(4rem,10vw,8rem) clamp(1rem,5vw,3rem);position:relative}
 .works-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1rem}
 
 /* =============================================
-   ABOUT, GEAR, SERVICES, CONTACT, FOOTER (mantidos iguais)
+   ABOUT
    ============================================= */
 #about{background:var(--bg);display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:clamp(2rem,6vw,5rem);align-items:center}
 .about-visual{position:relative}
@@ -292,6 +286,9 @@ section{padding:clamp(4rem,10vw,8rem) clamp(1rem,5vw,3rem);position:relative}
 .workflow-badge span{font-family:var(--font-mono);font-size:.62rem;letter-spacing:.12em;color:var(--accent);text-transform:uppercase}
 .workflow-badge::before{content:'◈';color:var(--blue-light)}
 
+/* =============================================
+   GEAR
+   ============================================= */
 #gear{background:var(--bg2)}
 .gear-intro{max-width:600px;color:var(--text2);font-weight:300;line-height:1.7;margin-bottom:3rem}
 .gear-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem}
@@ -320,6 +317,9 @@ section{padding:clamp(4rem,10vw,8rem) clamp(1rem,5vw,3rem);position:relative}
 .davinci-desc{font-size:.85rem;color:var(--text2);font-weight:300;line-height:1.6}
 @media(max-width:560px){.davinci-block{grid-template-columns:1fr}}
 
+/* =============================================
+   SERVICES
+   ============================================= */
 #services{background:var(--bg2)}
 .h-scroll{overflow-x:auto;padding:.5rem clamp(1rem,5vw,3rem) 2rem;scrollbar-width:none;cursor:grab}
 .h-scroll::-webkit-scrollbar{display:none}
@@ -332,6 +332,9 @@ section{padding:clamp(4rem,10vw,8rem) clamp(1rem,5vw,3rem);position:relative}
 .svc-title{font-family:var(--font-display);font-size:1.5rem;letter-spacing:.04em;text-transform:uppercase;margin-bottom:.8rem;color:var(--text)}
 .svc-desc{color:var(--text2);font-size:.85rem;line-height:1.6;font-weight:300}
 
+/* =============================================
+   CONTACT
+   ============================================= */
 #contact{background:var(--bg2);display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:clamp(2rem,6vw,5rem);align-items:start}
 .contact-head{font-family:var(--font-display);font-size:clamp(2.5rem,6vw,4.5rem);line-height:.95;letter-spacing:.02em;text-transform:uppercase;margin-bottom:1.5rem}
 .contact-head em{font-style:normal;display:block;color:var(--blue-light)}
@@ -363,6 +366,9 @@ section{padding:clamp(4rem,10vw,8rem) clamp(1rem,5vw,3rem);position:relative}
 .form-msg.error{display:block;border:1px solid #ef4444;color:#ef4444;background:rgba(239,68,68,.08)}
 @media(max-width:640px){.form-row{grid-template-columns:1fr}}
 
+/* =============================================
+   VIDEO MODAL
+   ============================================= */
 #video-modal{position:fixed;inset:0;z-index:500;background:rgba(3,6,15,.98);display:none;align-items:center;justify-content:center;backdrop-filter:blur(16px)}
 #video-modal.open{display:flex}
 .modal-wrap{width:92vw;max-width:1100px;position:relative}
@@ -373,6 +379,9 @@ section{padding:clamp(4rem,10vw,8rem) clamp(1rem,5vw,3rem);position:relative}
 .video-frame{width:100%;aspect-ratio:16/9;background:var(--bg3);border:1px solid rgba(13,92,232,.2);overflow:hidden}
 .video-frame iframe,.video-frame video{width:100%;height:100%;border:none}
 
+/* =============================================
+   FOOTER
+   ============================================= */
 footer{background:var(--bg);border-top:1px solid rgba(13,92,232,.1);padding:clamp(2rem,8vw,4rem) clamp(1rem,5vw,3rem) clamp(2rem,5vw,3rem)}
 .footer-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:3rem;gap:2rem;flex-wrap:wrap}
 .footer-brand{font-family:var(--font-display);font-size:clamp(2rem,6vw,4rem);color:transparent;-webkit-text-stroke:1px rgba(13,92,232,.2);line-height:.95;letter-spacing:.04em;text-transform:uppercase;transition:-webkit-text-stroke-color .4s}
@@ -438,7 +447,7 @@ footer{background:var(--bg);border-top:1px solid rgba(13,92,232,.1);padding:clam
 </div>
 
 <!-- =============================================
-     HERO — autoplay ativo, sem thumbnail
+     HERO — autoplay ativo
      ============================================= -->
 <section id="hero">
   <div class="hero-video-container">
@@ -499,7 +508,7 @@ footer{background:var(--bg);border-top:1px solid rgba(13,92,232,.1);padding:clam
 </div>
 
 <!-- =============================================
-     FEATURED — com thumbnails locais
+     FEATURED — com thumbnails locais (click-to-play)
      ============================================= -->
 <section id="featured" style="padding:clamp(4rem,10vw,8rem) 0;background:var(--bg)">
   <div class="featured-header reveal">
@@ -559,7 +568,7 @@ footer{background:var(--bg);border-top:1px solid rgba(13,92,232,.1);padding:clam
 </section>
 
 <!-- =============================================
-     WORKS — com thumbnails locais
+     WORKS — com thumbnails locais (click-to-play)
      ============================================= -->
 <section id="works">
   <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:2rem;flex-wrap:wrap;gap:1rem">
@@ -595,7 +604,7 @@ footer{background:var(--bg);border-top:1px solid rgba(13,92,232,.1);padding:clam
     </div>
 
     <!-- EVENTO 1 -->
-    <div class="work-card reveal vimeo-card" data-cat="evento" data-vimeo-id="1177247596" data-thumb="data/thumb_evento1.jpg" data-title="Cobertura de Evento" data-sub="Captação profissional de evento 01">
+    <div class="work-card reveal vimeo-card" data-cat="evento" data-vimeo-id="1177247596" data-thumb="data/thumb_hero.jpg" data-title="Cobertura de Evento" data-sub="Captação profissional de evento 01">
       <div class="work-badge">Evento</div>
       <div class="work-play" aria-hidden="true"><svg width="14" height="16" viewBox="0 0 14 16" fill="white"><path d="M0 0l14 8L0 16z"/></svg></div>
       <div class="vimeo-bg-wrap"><img class="vimeo-thumbnail" src="data/thumb_hero.jpg" alt="Thumbnail Culto Lagoinha Church" loading="lazy"></div>
@@ -669,7 +678,7 @@ footer{background:var(--bg);border-top:1px solid rgba(13,92,232,.1);padding:clam
   <span id="par-text" style="font-family:var(--font-display);font-size:clamp(2.5rem,8vw,7rem);white-space:nowrap;display:block;color:transparent;-webkit-text-stroke:1px rgba(13,92,232,.15)">CINEMA · EMOÇÃO · HISTÓRIA · BELÉM · CASAMENTO · FASHION · GASTRONOMIA · DAVINCI ·&nbsp;&nbsp;&nbsp;CINEMA · EMOÇÃO · HISTÓRIA · BELÉM · CASAMENTO · FASHION · GASTRONOMIA · DAVINCI ·&nbsp;&nbsp;&nbsp;</span>
 </div>
 
-<!-- ABOUT, GEAR, SERVICES, CONTACT, FOOTER (mantidos do original) -->
+<!-- ABOUT, GEAR, SERVICES, CONTACT, FOOTER -->
 <section id="about">
   <div class="about-visual reveal-left">
     <div class="about-frame">
@@ -780,7 +789,7 @@ footer{background:var(--bg);border-top:1px solid rgba(13,92,232,.1);padding:clam
 </div>
 
 <!-- =============================================
-     JAVASCRIPT — OTIMIZADO COM CLICK-TO-PLAY
+     JAVASCRIPT — HERO AUTOPLAY, CARDS CLICK-TO-PLAY
      ============================================= -->
 <script>
 'use strict';
@@ -930,10 +939,10 @@ const revealObserver = new IntersectionObserver(
 document.querySelectorAll('.reveal,.reveal-left,.reveal-right,.reveal-scale').forEach(el => revealObserver.observe(el));
 
 /* -----------------------------------------------
-   SISTEMA CLICK-TO-PLAY COM THUMBNAILS LOCAIS
+   SISTEMA CLICK-TO-PLAY (somente cards)
    ----------------------------------------------- */
 
-// Função para carregar vídeo Vimeo no card (background-style, mas sem autoplay)
+// Carrega vídeo Vimeo no card
 function loadVimeoInCard(card, vimeoId, isVertical, title, sub) {
   const wrap = card.querySelector('.vimeo-bg-wrap');
   if (!wrap || wrap.querySelector('iframe')) return;
@@ -955,12 +964,10 @@ function loadVimeoInCard(card, vimeoId, isVertical, title, sub) {
   
   wrap.appendChild(iframe);
   wrap.classList.add('loaded');
-  
-  // Abre modal também como fallback/experiência melhor
   openModal(title, sub, vimeoId, isVertical ? '9/16' : '16/9');
 }
 
-// Função para carregar vídeo local no card
+// Carrega vídeo local no card
 function loadLocalVideoInCard(card, videoSrc, title, sub) {
   const video = card.querySelector('video');
   if (!video) return;
@@ -975,12 +982,10 @@ function loadLocalVideoInCard(card, videoSrc, title, sub) {
   video.style.zIndex = '5';
   video.controls = true;
   video.play();
-  
-  // Também abre modal para melhor experiência
   openModalLocal(title, sub, videoSrc);
 }
 
-// Inicializa cards Vimeo (click-to-play)
+// Inicializa cards Vimeo
 function initVimeoCards() {
   document.querySelectorAll('.vimeo-card').forEach(card => {
     card.addEventListener('click', (e) => {
@@ -993,7 +998,6 @@ function initVimeoCards() {
         loadVimeoInCard(card, vimeoId, isVertical, title, sub);
       }
     });
-    // Acessibilidade: Enter e Espaço
     card.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
@@ -1003,7 +1007,7 @@ function initVimeoCards() {
   });
 }
 
-// Inicializa cards de vídeo local (click-to-play)
+// Inicializa cards de vídeo local
 function initLocalVideoCards() {
   document.querySelectorAll('.local-video-card').forEach(card => {
     card.addEventListener('click', (e) => {
@@ -1024,27 +1028,6 @@ function initLocalVideoCards() {
   });
 }
 
-// Hero video click-to-play
-function initHeroVideo() {
-  const heroContainer = document.getElementById('heroVideo');
-  const playBtn = document.getElementById('heroPlayBtn');
-  const iframe = heroContainer.querySelector('iframe');
-  const thumbnail = heroContainer.querySelector('.hero-thumbnail');
-  
-  function playHeroVideo() {
-    if (heroContainer.classList.contains('playing')) return;
-    heroContainer.classList.add('playing');
-    iframe.src = iframe.src.replace('autoplay=0', 'autoplay=1');
-    // Pequeno delay para garantir que o iframe carregue
-    setTimeout(() => {
-      iframe.contentWindow?.postMessage('{"method":"play"}', 'https://player.vimeo.com');
-    }, 100);
-  }
-  
-  heroContainer.addEventListener('click', playHeroVideo);
-  if (playBtn) playBtn.addEventListener('click', (e) => { e.stopPropagation(); playHeroVideo(); });
-}
-
 /* -----------------------------------------------
    WILL-CHANGE — hover otimizado
    ----------------------------------------------- */
@@ -1052,43 +1035,6 @@ function initWillChange() {
   document.querySelectorAll('.work-card,.gear-card,.svc-card,.featured-item,.featured-main').forEach(el => {
     el.addEventListener('mouseenter', () => { el.style.willChange = 'transform'; });
     el.addEventListener('mouseleave', () => { el.style.willChange = 'auto'; });
-  });
-}
-
-/* -----------------------------------------------
-   CURSOR CUSTOM
-   ----------------------------------------------- */
-function initCursor() {
-  if (!window.matchMedia('(pointer: fine)').matches) return;
-  const dot = document.getElementById('cursor-dot');
-  const ring = document.getElementById('cursor-ring');
-  let mx = 0, my = 0, rx = 0, ry = 0;
-  let rafId = null;
-  let lastMoveTime = 0;
-  document.addEventListener('mousemove', e => {
-    mx = e.clientX;
-    my = e.clientY;
-    lastMoveTime = Date.now();
-    dot.style.left = mx + 'px';
-    dot.style.top = my + 'px';
-  }, { passive: true });
-  function animateCursor() {
-    if (Date.now() - lastMoveTime > 2000) { rafId = requestAnimationFrame(animateCursor); return; }
-    rx += (mx - rx) * 0.1;
-    ry += (my - ry) * 0.1;
-    ring.style.left = rx + 'px';
-    ring.style.top = ry + 'px';
-    rafId = requestAnimationFrame(animateCursor);
-  }
-  document.addEventListener('mousemove', () => { if (!rafId) animateCursor(); }, { passive: true, once: true });
-  const hoverEls = document.querySelectorAll('a,button,.work-card,.svc-card,.gear-card,.nav-link,.featured-item,.featured-main');
-  hoverEls.forEach(el => {
-    el.addEventListener('mouseenter', () => {
-      const isVideo = el.matches('.work-card,.featured-item,.featured-main');
-      document.body.classList.toggle('cursor-video', isVideo);
-      document.body.classList.toggle('cursor-hover', !isVideo);
-    });
-    el.addEventListener('mouseleave', () => { document.body.classList.remove('cursor-hover', 'cursor-video'); });
   });
 }
 
@@ -1149,7 +1095,7 @@ function initContactForm() {
 }
 
 /* -----------------------------------------------
-   LOADER
+   LOADER (sem hero, hero já está em autoplay)
    ----------------------------------------------- */
 function initLoader() {
   const fill = document.getElementById('loader-fill');
@@ -1163,10 +1109,8 @@ function initLoader() {
       clearInterval(intv);
       setTimeout(() => {
         document.getElementById('loader').classList.add('hidden');
-        initHeroVideo();
         initVimeoCards();
         initLocalVideoCards();
-        initCursor();
         initWillChange();
         initHScroll();
         initContactForm();
