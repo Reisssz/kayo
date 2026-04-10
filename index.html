@@ -173,6 +173,7 @@ section{padding:clamp(4rem,10vw,8rem) clamp(1rem,5vw,3rem);position:relative}
 
 /* =============================================
    REVEAL ANIMATIONS
+   -- IMPORTANTE: só afeta o wrapper do card, não a thumbnail interna
    ============================================= */
 .reveal,.reveal-left,.reveal-right,.reveal-scale{opacity:0;transition:opacity .9s var(--ease-cinematic),transform .9s var(--ease-cinematic)}
 .reveal{transform:translateY(50px)}
@@ -180,6 +181,21 @@ section{padding:clamp(4rem,10vw,8rem) clamp(1rem,5vw,3rem);position:relative}
 .reveal-right{transform:translateX(50px)}
 .reveal-scale{transform:scale(.96)}
 .reveal.visible,.reveal-left.visible,.reveal-right.visible,.reveal-scale.visible{opacity:1;transform:translateY(0) translateX(0) scale(1)}
+
+/*
+  FIX CRÍTICO: thumbnails nunca devem depender da classe .visible
+  Elas precisam ser visíveis por padrão, independente da animação do card pai.
+  O opacity:0 do .reveal afeta o wrapper, mas as imagens dentro precisam ser
+  sempre renderizadas para o browser fazer lazy-load delas.
+*/
+.work-card .vimeo-thumbnail,
+.work-card video,
+.featured-item .vimeo-thumbnail,
+.featured-main .vimeo-thumbnail {
+  /* Visível por padrão - a animação fica no wrapper pai */
+  opacity: 1 !important;
+  display: block;
+}
 
 /* =============================================
    MARQUEE
@@ -204,10 +220,40 @@ section{padding:clamp(4rem,10vw,8rem) clamp(1rem,5vw,3rem);position:relative}
 
 /* Cards de trabalho */
 .work-card{position:relative;overflow:hidden;cursor:pointer;background:var(--bg3);aspect-ratio:16/9}
-.work-card .vimeo-thumbnail,.work-card video{transition:transform .8s var(--ease-cinematic),filter .5s}
+
+/* Hover nos thumbnails do card */
 @media(hover:hover) and (pointer:fine){
-  .work-card:hover .vimeo-thumbnail,.work-card:hover video{transform:scale(1.07);filter:saturate(1.3) brightness(.85)}
+  .work-card:hover .vimeo-thumbnail,
+  .work-card:hover video{transform:scale(1.07);filter:saturate(1.3) brightness(.85)}
 }
+
+/* Thumbnails dos work-cards: position absolute dentro do vimeo-bg-wrap */
+.work-card .vimeo-bg-wrap .vimeo-thumbnail{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  filter:saturate(.5) brightness(.65);
+  transition:filter .5s, transform .8s var(--ease-cinematic);
+  display:block;
+  z-index:1;
+}
+
+/* Thumbnails dos local-video-cards: position absolute direto no card */
+.work-card > .vimeo-thumbnail,
+.featured-item > .vimeo-thumbnail {
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  filter:saturate(.5) brightness(.65);
+  transition:filter .5s, transform .8s var(--ease-cinematic);
+  display:block;
+  z-index:1;
+}
+
 .work-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(3,6,15,.95) 0%,rgba(3,6,15,.2) 45%,transparent 70%);opacity:0;transition:opacity .45s;display:flex;flex-direction:column;justify-content:flex-end;padding:1.5rem;z-index:3;pointer-events:none}
 .work-card:hover .work-overlay{opacity:1}
 .work-badge{position:absolute;top:.8rem;left:.8rem;background:rgba(3,6,15,.85);border:1px solid rgba(13,92,232,.3);font-family:var(--font-mono);font-size:.55rem;padding:.3rem .7rem;letter-spacing:.15em;text-transform:uppercase;color:var(--text2);backdrop-filter:blur(4px);z-index:3}
@@ -217,7 +263,17 @@ section{padding:clamp(4rem,10vw,8rem) clamp(1rem,5vw,3rem);position:relative}
 .work-card:hover .work-play{transform:translate(-50%,-50%) scale(1);opacity:1}
 
 /* Vídeos locais nos cards */
-.work-card video,.featured-item video{width:100%;height:100%;object-fit:cover;transition:transform .8s var(--ease-cinematic),filter .5s;filter:saturate(.5) brightness(.65);display:block}
+.work-card video,.featured-item video{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  transition:transform .8s var(--ease-cinematic),filter .5s;
+  filter:saturate(.5) brightness(.65);
+  display:none; /* escondido por padrão, só aparece quando tocando */
+  z-index:2;
+}
 @media(hover:hover) and (pointer:fine){
   .work-card:hover video{transform:scale(1.07);filter:saturate(1.3) brightness(.85)}
   .featured-item:hover video{transform:scale(1.06);filter:saturate(1.1) brightness(.75)}
@@ -446,9 +502,7 @@ footer{background:var(--bg);border-top:1px solid rgba(13,92,232,.1);padding:clam
   <a href="#contact" onclick="toggleMenu()">Contato</a>
 </div>
 
-<!-- =============================================
-     HERO — autoplay ativo
-     ============================================= -->
+<!-- HERO — autoplay ativo -->
 <section id="hero">
   <div class="hero-video-container">
     <iframe
@@ -507,9 +561,7 @@ footer{background:var(--bg);border-top:1px solid rgba(13,92,232,.1);padding:clam
   </div>
 </div>
 
-<!-- =============================================
-     FEATURED — com thumbnails locais (click-to-play)
-     ============================================= -->
+<!-- FEATURED -->
 <section id="featured" style="padding:clamp(4rem,10vw,8rem) 0;background:var(--bg)">
   <div class="featured-header reveal">
     <div class="featured-badge"><span>Participações em Destaque</span></div>
@@ -526,7 +578,7 @@ footer{background:var(--bg);border-top:1px solid rgba(13,92,232,.1);padding:clam
          data-title="Beleza Parawara"
          data-sub="Produção de alto nível">
       <div class="vimeo-bg-wrap vertical">
-        <img class="vimeo-thumbnail" src="data/thumb_fashion1.jpg" alt="Thumbnail Beleza Parawara" loading="lazy">
+        <img class="vimeo-thumbnail" src="data/thumb_fashion1.jpg" alt="Thumbnail Beleza Parawara" loading="lazy" decoding="async">
       </div>
       <div class="featured-overlay">
         <div class="feat-star">Produção Premium</div>
@@ -543,8 +595,8 @@ footer{background:var(--bg);border-top:1px solid rgba(13,92,232,.1);padding:clam
            data-thumb="data/thumb_participacao2.jpg"
            data-title="Participação Premium"
            data-sub="Show do ALOK">
-        <img class="vimeo-thumbnail" src="data/thumb_participacao2.jpg" alt="Thumbnail Show do ALOK" loading="lazy">
-        <video preload="none" style="display:none">
+        <img class="vimeo-thumbnail" src="data/thumb_participacao2.jpg" alt="Thumbnail Show do ALOK" loading="lazy" decoding="async">
+        <video preload="none">
           <source src="data/participacao/participacao2.mp4" type="video/mp4">
         </video>
         <div class="featured-overlay">
@@ -567,9 +619,7 @@ footer{background:var(--bg);border-top:1px solid rgba(13,92,232,.1);padding:clam
   </div>
 </section>
 
-<!-- =============================================
-     WORKS — com thumbnails locais (click-to-play)
-     ============================================= -->
+<!-- WORKS -->
 <section id="works">
   <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:2rem;flex-wrap:wrap;gap:1rem">
     <div>
@@ -591,7 +641,7 @@ footer{background:var(--bg);border-top:1px solid rgba(13,92,232,.1);padding:clam
     <div class="work-card reveal vimeo-card" data-cat="afeto" data-vimeo-id="1177249622" data-thumb="data/thumb_afeto1.jpg" data-title="Afeto — Filme de Casal" data-sub="Captação cinematográfica de amor">
       <div class="work-badge">Afeto</div>
       <div class="work-play" aria-hidden="true"><svg width="14" height="16" viewBox="0 0 14 16" fill="white"><path d="M0 0l14 8L0 16z"/></svg></div>
-      <div class="vimeo-bg-wrap"><img class="vimeo-thumbnail" src="data/thumb_afeto1.jpg" alt="Thumbnail Teaser Wedding" loading="lazy"></div>
+      <div class="vimeo-bg-wrap"><img class="vimeo-thumbnail" src="data/thumb_afeto1.jpg" alt="Thumbnail Teaser Wedding" loading="lazy" decoding="async"></div>
       <div class="work-overlay"><div class="work-cat">Casamento &amp; Afeto</div><div class="work-name">Teaser Wedding</div></div>
     </div>
 
@@ -599,7 +649,7 @@ footer{background:var(--bg);border-top:1px solid rgba(13,92,232,.1);padding:clam
     <div class="work-card reveal vimeo-card" data-cat="afeto" data-vimeo-id="1177249716" data-thumb="data/thumb_afeto2.jpg" data-title="Afeto — Filme de Casal" data-sub="Captação cinematográfica de amor 02">
       <div class="work-badge">Afeto</div>
       <div class="work-play" aria-hidden="true"><svg width="14" height="16" viewBox="0 0 14 16" fill="white"><path d="M0 0l14 8L0 16z"/></svg></div>
-      <div class="vimeo-bg-wrap"><img class="vimeo-thumbnail" src="data/thumb_afeto2.jpg" alt="Thumbnail Pré-Wedding" loading="lazy"></div>
+      <div class="vimeo-bg-wrap"><img class="vimeo-thumbnail" src="data/thumb_afeto2.jpg" alt="Thumbnail Pré-Wedding" loading="lazy" decoding="async"></div>
       <div class="work-overlay"><div class="work-cat">Casamento &amp; Afeto</div><div class="work-name">Pré-Wedding</div></div>
     </div>
 
@@ -607,7 +657,7 @@ footer{background:var(--bg);border-top:1px solid rgba(13,92,232,.1);padding:clam
     <div class="work-card reveal vimeo-card" data-cat="evento" data-vimeo-id="1177247596" data-thumb="data/thumb_hero.jpg" data-title="Cobertura de Evento" data-sub="Captação profissional de evento 01">
       <div class="work-badge">Evento</div>
       <div class="work-play" aria-hidden="true"><svg width="14" height="16" viewBox="0 0 14 16" fill="white"><path d="M0 0l14 8L0 16z"/></svg></div>
-      <div class="vimeo-bg-wrap"><img class="vimeo-thumbnail" src="data/thumb_hero.jpg" alt="Thumbnail Culto Lagoinha Church" loading="lazy"></div>
+      <div class="vimeo-bg-wrap"><img class="vimeo-thumbnail" src="data/thumb_hero.jpg" alt="Thumbnail Culto Lagoinha Church" loading="lazy" decoding="async"></div>
       <div class="work-overlay"><div class="work-cat">Cobertura de Evento</div><div class="work-name">Culto Lagoinha Church</div></div>
     </div>
 
@@ -615,15 +665,15 @@ footer{background:var(--bg);border-top:1px solid rgba(13,92,232,.1);padding:clam
     <div class="work-card reveal vimeo-card" data-cat="evento" data-vimeo-id="1177247928" data-thumb="data/thumb_evento2.jpg" data-title="Cobertura de Evento" data-sub="Captação profissional de evento 02">
       <div class="work-badge">Evento</div>
       <div class="work-play" aria-hidden="true"><svg width="14" height="16" viewBox="0 0 14 16" fill="white"><path d="M0 0l14 8L0 16z"/></svg></div>
-      <div class="vimeo-bg-wrap"><img class="vimeo-thumbnail" src="data/thumb_evento2.jpg" alt="Thumbnail Abertura do Círio de Nazaré 2025" loading="lazy"></div>
+      <div class="vimeo-bg-wrap"><img class="vimeo-thumbnail" src="data/thumb_evento2.jpg" alt="Thumbnail Abertura do Círio de Nazaré 2025" loading="lazy" decoding="async"></div>
       <div class="work-overlay"><div class="work-cat">Cobertura de Evento</div><div class="work-name">Abertura do Círio de Nazaré 2025</div></div>
     </div>
-
+    
     <!-- EVENTO 3 -->
     <div class="work-card reveal vimeo-card" data-cat="evento" data-vimeo-id="1177248122" data-thumb="data/thumb_evento3.jpg" data-title="Cobertura de Evento" data-sub="Captação profissional de evento 03">
       <div class="work-badge">Evento</div>
       <div class="work-play" aria-hidden="true"><svg width="14" height="16" viewBox="0 0 14 16" fill="white"><path d="M0 0l14 8L0 16z"/></svg></div>
-      <div class="vimeo-bg-wrap"><img class="vimeo-thumbnail" src="data/thumb_evento3.jpg" alt="Thumbnail Conferência Shine 2026" loading="lazy"></div>
+      <div class="vimeo-bg-wrap"><img class="vimeo-thumbnail" src="data/thumb_evento3.jpg" alt="Thumbnail Conferência Shine 2026" loading="lazy" decoding="async"></div>
       <div class="work-overlay"><div class="work-cat">Cobertura de Evento</div><div class="work-name">Conferência Shine 2026</div></div>
     </div>
 
@@ -631,7 +681,7 @@ footer{background:var(--bg);border-top:1px solid rgba(13,92,232,.1);padding:clam
     <div class="work-card reveal vimeo-card" data-cat="fashion" data-vimeo-id="1177246950" data-thumb="data/thumb_fashion1.jpg" data-vertical="true" data-title="Fashion Film" data-sub="Direção criativa e edição de moda 01">
       <div class="work-badge">Fashion</div>
       <div class="work-play" aria-hidden="true"><svg width="14" height="16" viewBox="0 0 14 16" fill="white"><path d="M0 0l14 8L0 16z"/></svg></div>
-      <div class="vimeo-bg-wrap vertical"><img class="vimeo-thumbnail" src="data/thumb_fashion1.jpg" alt="Thumbnail Beleza Parawara" loading="lazy"></div>
+      <div class="vimeo-bg-wrap vertical"><img class="vimeo-thumbnail" src="data/thumb_fashion1.jpg" alt="Thumbnail Beleza Parawara" loading="lazy" decoding="async"></div>
       <div class="work-overlay"><div class="work-cat">Fashion Film</div><div class="work-name">Beleza Parawara</div></div>
     </div>
 
@@ -639,7 +689,7 @@ footer{background:var(--bg);border-top:1px solid rgba(13,92,232,.1);padding:clam
     <div class="work-card reveal vimeo-card" data-cat="fashion" data-vimeo-id="1177247165" data-thumb="data/thumb_fashion2.jpg" data-vertical="true" data-title="Fashion Film" data-sub="Direção criativa e edição de moda 02">
       <div class="work-badge">Fashion</div>
       <div class="work-play" aria-hidden="true"><svg width="14" height="16" viewBox="0 0 14 16" fill="white"><path d="M0 0l14 8L0 16z"/></svg></div>
-      <div class="vimeo-bg-wrap vertical"><img class="vimeo-thumbnail" src="data/thumb_fashion2.jpg" alt="Thumbnail Lojas Fortaleza" loading="lazy"></div>
+      <div class="vimeo-bg-wrap vertical"><img class="vimeo-thumbnail" src="data/thumb_fashion2.jpg" alt="Thumbnail Lojas Fortaleza" loading="lazy" decoding="async"></div>
       <div class="work-overlay"><div class="work-cat">Fashion Film</div><div class="work-name">Lojas Fortaleza</div></div>
     </div>
 
@@ -647,8 +697,8 @@ footer{background:var(--bg);border-top:1px solid rgba(13,92,232,.1);padding:clam
     <div class="work-card reveal local-video-card" data-cat="gastronomia" data-video-src="data/gastronomia/gastronomia1.mov" data-thumb="data/thumb_gastro1.jpg" data-title="Gastronomia" data-sub="Vídeo gastronômico cinematográfico 01">
       <div class="work-badge">Gastronomia</div>
       <div class="work-play" aria-hidden="true"><svg width="14" height="16" viewBox="0 0 14 16" fill="white"><path d="M0 0l14 8L0 16z"/></svg></div>
-      <img class="vimeo-thumbnail" src="data/thumb_gastro1.jpg" alt="Thumbnail Café Club Express" loading="lazy">
-      <video preload="none" style="display:none"><source src="data/gastronomia/gastronomia1.mov" type="video/mp4"></video>
+      <img class="vimeo-thumbnail" src="data/thumb_gastro1.jpg" alt="Thumbnail Café Club Express" loading="lazy" decoding="async">
+      <video preload="none"><source src="data/gastronomia/gastronomia1.mov" type="video/mp4"></video>
       <div class="work-overlay"><div class="work-cat">Gastronomia</div><div class="work-name">Café Club Express</div></div>
     </div>
 
@@ -656,8 +706,8 @@ footer{background:var(--bg);border-top:1px solid rgba(13,92,232,.1);padding:clam
     <div class="work-card reveal local-video-card" data-cat="gastronomia" data-video-src="data/gastronomia/gastronomia2.mov" data-thumb="data/thumb_gastro2.jpg" data-title="Gastronomia" data-sub="Vídeo gastronômico cinematográfico 02">
       <div class="work-badge">Gastronomia</div>
       <div class="work-play" aria-hidden="true"><svg width="14" height="16" viewBox="0 0 14 16" fill="white"><path d="M0 0l14 8L0 16z"/></svg></div>
-      <img class="vimeo-thumbnail" src="data/thumb_gastro2.jpg" alt="Thumbnail Café Club Express 2" loading="lazy">
-      <video preload="none" style="display:none"><source src="data/gastronomia/gastronomia2.mov" type="video/mp4"></video>
+      <img class="vimeo-thumbnail" src="data/thumb_gastro2.jpg" alt="Thumbnail Café Club Express 2" loading="lazy" decoding="async">
+      <video preload="none"><source src="data/gastronomia/gastronomia2.mov" type="video/mp4"></video>
       <div class="work-overlay"><div class="work-cat">Gastronomia</div><div class="work-name">Café Club Express</div></div>
     </div>
 
@@ -665,8 +715,8 @@ footer{background:var(--bg);border-top:1px solid rgba(13,92,232,.1);padding:clam
     <div class="work-card reveal local-video-card" data-cat="gastronomia" data-video-src="data/gastronomia/gastronomia3.mov" data-thumb="data/thumb_gastro3.jpg" data-title="Gastronomia" data-sub="Vídeo gastronômico cinematográfico 03">
       <div class="work-badge">Gastronomia</div>
       <div class="work-play" aria-hidden="true"><svg width="14" height="16" viewBox="0 0 14 16" fill="white"><path d="M0 0l14 8L0 16z"/></svg></div>
-      <img class="vimeo-thumbnail" src="data/thumb_gastro3.jpg" alt="Thumbnail Café Club Express 3" loading="lazy">
-      <video preload="none" style="display:none"><source src="data/gastronomia/gastronomia3.mov" type="video/mp4"></video>
+      <img class="vimeo-thumbnail" src="data/thumb_gastro3.jpg" alt="Thumbnail Café Club Express 3" loading="lazy" decoding="async">
+      <video preload="none"><source src="data/gastronomia/gastronomia3.mov" type="video/mp4"></video>
       <div class="work-overlay"><div class="work-cat">Gastronomia</div><div class="work-name">Café Club Express</div></div>
     </div>
 
@@ -678,7 +728,7 @@ footer{background:var(--bg);border-top:1px solid rgba(13,92,232,.1);padding:clam
   <span id="par-text" style="font-family:var(--font-display);font-size:clamp(2.5rem,8vw,7rem);white-space:nowrap;display:block;color:transparent;-webkit-text-stroke:1px rgba(13,92,232,.15)">CINEMA · EMOÇÃO · HISTÓRIA · BELÉM · CASAMENTO · FASHION · GASTRONOMIA · DAVINCI ·&nbsp;&nbsp;&nbsp;CINEMA · EMOÇÃO · HISTÓRIA · BELÉM · CASAMENTO · FASHION · GASTRONOMIA · DAVINCI ·&nbsp;&nbsp;&nbsp;</span>
 </div>
 
-<!-- ABOUT, GEAR, SERVICES, CONTACT, FOOTER -->
+<!-- ABOUT -->
 <section id="about">
   <div class="about-visual reveal-left">
     <div class="about-frame">
@@ -713,6 +763,7 @@ footer{background:var(--bg);border-top:1px solid rgba(13,92,232,.1);padding:clam
   </div>
 </section>
 
+<!-- GEAR -->
 <section id="gear">
   <div class="section-label reveal"><span>Arsenal Técnico</span></div>
   <h2 class="section-title reveal">Equipamentos</h2>
@@ -728,6 +779,7 @@ footer{background:var(--bg);border-top:1px solid rgba(13,92,232,.1);padding:clam
   <div class="davinci-block reveal"><div class="davinci-icon"><span>DR</span></div><div><div class="davinci-label">Software de Pós-Produção</div><div class="davinci-title">DaVinci Resolve Studio</div><p class="davinci-desc">Toda a edição, color grading e masterização é realizada no <strong>DaVinci Resolve Studio</strong> — o padrão da indústria cinematográfica mundial.</p></div></div>
 </section>
 
+<!-- SERVICES -->
 <section id="services">
   <div class="section-label reveal"><span>O Que Ofereço</span></div>
   <h2 class="section-title reveal">Serviços</h2>
@@ -743,6 +795,7 @@ footer{background:var(--bg);border-top:1px solid rgba(13,92,232,.1);padding:clam
   </div>
 </section>
 
+<!-- CONTACT -->
 <section id="contact">
   <div class="reveal-left">
     <div class="section-label"><span>Contato</span></div>
@@ -842,12 +895,11 @@ document.querySelectorAll('.mobile-menu a').forEach(a => {
 });
 
 /* -----------------------------------------------
-   MODAL DE VÍDEO CORRIGIDO
+   MODAL DE VÍDEO
    ----------------------------------------------- */
-let currentModalData = null; // Armazena dados do vídeo atual
+let currentModalData = null;
 
 function openModal(title, sub, vimeoId, aspectRatio, cardElement) {
-  // Fecha modal anterior se existir
   closeModal();
   
   const isVertical = aspectRatio?.startsWith('9');
@@ -857,8 +909,6 @@ function openModal(title, sub, vimeoId, aspectRatio, cardElement) {
   frame.style.margin = isVertical ? '0 auto' : '';
   frame.style.maxWidth = isVertical ? 'calc(80vh * 9 / 16)' : '';
   document.getElementById('modal-title').textContent = `${title} — ${sub}`;
-  
-  // Limpa o frame
   frame.innerHTML = '';
   
   const iframe = document.createElement('iframe');
@@ -866,29 +916,16 @@ function openModal(title, sub, vimeoId, aspectRatio, cardElement) {
   iframe.allow = 'autoplay; fullscreen; picture-in-picture';
   iframe.allowFullscreen = true;
   iframe.title = sanitizeStr(title);
-  iframe.style.width = '100%';
-  iframe.style.height = '100%';
-  iframe.style.border = 'none';
-  
+  iframe.style.cssText = 'width:100%;height:100%;border:none';
   frame.appendChild(iframe);
   
-  // Salva dados para restaurar depois
-  currentModalData = {
-    type: 'vimeo',
-    title: title,
-    sub: sub,
-    vimeoId: vimeoId,
-    aspectRatio: aspectRatio,
-    cardElement: cardElement
-  };
+  currentModalData = { type: 'vimeo', cardElement };
   
-  const modal = document.getElementById('video-modal');
-  modal.classList.add('open');
+  document.getElementById('video-modal').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
 
 function openModalLocal(title, sub, src, cardElement) {
-  // Fecha modal anterior se existir
   closeModal();
   
   const frame = document.getElementById('modal-frame');
@@ -897,105 +934,39 @@ function openModalLocal(title, sub, src, cardElement) {
   frame.style.margin = '';
   frame.style.maxWidth = '';
   document.getElementById('modal-title').textContent = `${title} — ${sub}`;
-  
-  // Limpa o frame
   frame.innerHTML = '';
   
   const video = document.createElement('video');
   video.controls = true;
   video.autoplay = true;
-  video.style.width = '100%';
-  video.style.height = '100%';
-  video.style.objectFit = 'contain';
-  video.style.background = '#000';
+  video.style.cssText = 'width:100%;height:100%;object-fit:contain;background:#000';
   video.setAttribute('aria-label', sanitizeStr(title));
-  
   const source = document.createElement('source');
   source.src = encodeURI(src);
   source.type = 'video/mp4';
-  
   video.appendChild(source);
   frame.appendChild(video);
   
-  // Salva dados para restaurar depois
-  currentModalData = {
-    type: 'local',
-    title: title,
-    sub: sub,
-    src: src,
-    cardElement: cardElement
-  };
+  currentModalData = { type: 'local', cardElement };
   
   video.play().catch(e => console.log('Play failed:', e));
-  
-  const modal = document.getElementById('video-modal');
-  modal.classList.add('open');
+  document.getElementById('video-modal').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
 
 function closeModal() {
   const frame = document.getElementById('modal-frame');
-  
-  // Restaura a thumbnail do card que estava tocando
-  if (currentModalData && currentModalData.cardElement) {
-    const card = currentModalData.cardElement;
-    const wrap = card.querySelector('.vimeo-bg-wrap');
-    const thumbnail = card.querySelector('.vimeo-thumbnail');
-    const videoElement = card.querySelector('video');
-    const iframeElement = card.querySelector('iframe');
-    
-    // Remove iframe se existir (vimeo)
-    if (iframeElement) {
-      try {
-        iframeElement.contentWindow?.postMessage('{"method":"pause"}', 'https://player.vimeo.com');
-      } catch(e) {}
-      iframeElement.remove();
-    }
-    
-    // Reseta vídeo local
-    if (videoElement) {
-      videoElement.pause();
-      videoElement.currentTime = 0;
-      videoElement.style.display = 'none';
-    }
-    
-    // Mostra thumbnail novamente
-    if (thumbnail) {
-      thumbnail.style.display = 'block';
-      thumbnail.style.opacity = '1';
-    }
-    
-    // Remove classe loaded do wrap
-    if (wrap) {
-      wrap.classList.remove('loaded');
-    }
-  }
-  
-  // Limpa o frame do modal
   frame.innerHTML = '';
-  
-  // Reseta dados do modal
   currentModalData = null;
-  
-  const modal = document.getElementById('video-modal');
-  modal.classList.remove('open');
+  document.getElementById('video-modal').classList.remove('open');
   document.body.style.overflow = '';
 }
 
-// Eventos para fechar modal
-document.addEventListener('keydown', e => { 
-  if (e.key === 'Escape') closeModal(); 
-});
-
-document.getElementById('video-modal').addEventListener('click', function(e) {
-  if (e.target === this) closeModal();
-});
-
-// Botão de fechar
-document.querySelector('.modal-close')?.addEventListener('click', closeModal);
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+document.getElementById('video-modal').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
 
 /* -----------------------------------------------
-   FILTRO DE WORKS
+   FILTRO DE WORKS — corrigido para não esconder thumbnails
    ----------------------------------------------- */
 function filterWorks(cat, btn) {
   document.querySelectorAll('.filter-btn').forEach(b => {
@@ -1004,8 +975,11 @@ function filterWorks(cat, btn) {
   });
   btn.classList.add('active');
   btn.setAttribute('aria-current', 'true');
+
   document.querySelectorAll('.work-card').forEach(card => {
     const show = cat === 'all' || card.dataset.cat === cat;
+    // Usa visibility + opacity em vez de display:none para não quebrar o layout
+    // e não interferir no carregamento das imagens
     card.style.opacity = show ? '1' : '0.25';
     card.style.pointerEvents = show ? 'auto' : 'none';
     card.style.filter = show ? 'none' : 'blur(2px)';
@@ -1040,120 +1014,65 @@ window.addEventListener('scroll', () => {
 
 /* -----------------------------------------------
    REVEAL ANIMATIONS
+   FIX: rootMargin generoso para disparar ANTES de entrar na viewport.
+   Isso garante que as imagens sejam visíveis antes do usuário rolar até elas.
    ----------------------------------------------- */
 const revealObserver = new IntersectionObserver(
-  entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
-  { threshold: 0.08, rootMargin: '0px 0px -30px 0px' }
+  entries => entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      // Desconecta o observer depois que o elemento ficou visível (otimização)
+      revealObserver.unobserve(e.target);
+    }
+  }),
+  {
+    threshold: 0.01,           // dispara com 1% visível (era 0.08 = 8%)
+    rootMargin: '0px 0px 100px 0px'  // pré-dispara 100px antes de entrar na tela
+  }
 );
-document.querySelectorAll('.reveal,.reveal-left,.reveal-right,.reveal-scale').forEach(el => revealObserver.observe(el));
+
+document.querySelectorAll('.reveal,.reveal-left,.reveal-right,.reveal-scale').forEach(el => {
+  revealObserver.observe(el);
+});
 
 /* -----------------------------------------------
-   SISTEMA CLICK-TO-PLAY CORRIGIDO
+   SISTEMA CLICK-TO-PLAY
+   Simplificado: sem cloneNode, sem redeclaração de listeners.
    ----------------------------------------------- */
-
-// Carrega vídeo Vimeo no card (background silencioso)
-function loadVimeoBackground(card, vimeoId, isVertical) {
-  const wrap = card.querySelector('.vimeo-bg-wrap');
-  if (!wrap || wrap.querySelector('iframe')) return;
-  
-  const iframe = document.createElement('iframe');
-  iframe.src = `https://player.vimeo.com/video/${vimeoId}?background=1&autoplay=1&loop=1&muted=1&autopause=0`;
-  iframe.allow = 'autoplay; fullscreen';
-  iframe.title = 'Background video';
-  iframe.style.cssText = `
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: ${isVertical ? '100%' : '177.78%'};
-    height: ${isVertical ? '177.78%' : '100%'};
-    transform: translate(-50%, -50%);
-    border: none;
-    z-index: 5;
-    opacity: 0;
-    transition: opacity 0.3s;
-  `;
-  
-  iframe.onload = () => {
-    iframe.style.opacity = '1';
-    const thumb = wrap.querySelector('.vimeo-thumbnail');
-    if (thumb) thumb.style.opacity = '0';
-  };
-  
-  wrap.appendChild(iframe);
-  wrap.classList.add('loaded');
-}
-
-// Abre modal com vídeo Vimeo
-function openVimeoModal(card, vimeoId, isVertical, title, sub) {
-  // Primeiro carrega o background silencioso no card
-  loadVimeoBackground(card, vimeoId, isVertical);
-  // Depois abre o modal com som
-  openModal(title, sub, vimeoId, isVertical ? '9/16' : '16/9', card);
-}
-
-// Abre modal com vídeo local
-function openLocalModal(card, videoSrc, title, sub) {
-  // Toca o vídeo no card silenciosamente (background)
-  const video = card.querySelector('video');
-  if (video) {
-    video.muted = true;
-    video.loop = true;
-    video.play().catch(e => console.log('Background play:', e));
-  }
-  // Abre modal com som
-  openModalLocal(title, sub, videoSrc, card);
-}
-
-// Inicializa cards Vimeo
 function initVimeoCards() {
   document.querySelectorAll('.vimeo-card').forEach(card => {
-    // Remove listener antigo se existir
-    const newCard = card.cloneNode(true);
-    card.parentNode?.replaceChild(newCard, card);
-    
-    newCard.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const vimeoId = newCard.dataset.vimeoId;
-      const isVertical = newCard.dataset.vertical === 'true';
-      const title = newCard.dataset.title || 'Vídeo';
-      const sub = newCard.dataset.sub || '';
-      if (vimeoId) {
-        openVimeoModal(newCard, vimeoId, isVertical, title, sub);
-      }
+    card.addEventListener('click', () => {
+      const vimeoId = card.dataset.vimeoId;
+      const isVertical = card.dataset.vertical === 'true';
+      const title = card.dataset.title || 'Vídeo';
+      const sub = card.dataset.sub || '';
+      if (vimeoId) openModal(title, sub, vimeoId, isVertical ? '9/16' : '16/9', card);
     });
-    
-    newCard.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        newCard.click();
-      }
+
+    card.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); card.click(); }
     });
+
+    card.setAttribute('tabindex', '0');
+    card.setAttribute('role', 'button');
   });
 }
 
-// Inicializa cards de vídeo local
 function initLocalVideoCards() {
   document.querySelectorAll('.local-video-card').forEach(card => {
-    // Remove listener antigo
-    const newCard = card.cloneNode(true);
-    card.parentNode?.replaceChild(newCard, card);
-    
-    newCard.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const videoSrc = newCard.dataset.videoSrc;
-      const title = newCard.dataset.title || 'Vídeo';
-      const sub = newCard.dataset.sub || '';
-      if (videoSrc) {
-        openLocalModal(newCard, videoSrc, title, sub);
-      }
+    card.addEventListener('click', () => {
+      const videoSrc = card.dataset.videoSrc;
+      const title = card.dataset.title || 'Vídeo';
+      const sub = card.dataset.sub || '';
+      if (videoSrc) openModalLocal(title, sub, videoSrc, card);
     });
-    
-    newCard.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        newCard.click();
-      }
+
+    card.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); card.click(); }
     });
+
+    card.setAttribute('tabindex', '0');
+    card.setAttribute('role', 'button');
   });
 }
 
@@ -1162,8 +1081,8 @@ function initLocalVideoCards() {
    ----------------------------------------------- */
 function initWillChange() {
   document.querySelectorAll('.work-card,.gear-card,.svc-card,.featured-item,.featured-main').forEach(el => {
-    el.addEventListener('mouseenter', () => { el.style.willChange = 'transform'; });
-    el.addEventListener('mouseleave', () => { el.style.willChange = 'auto'; });
+    el.addEventListener('mouseenter', () => { el.style.willChange = 'transform'; }, { passive: true });
+    el.addEventListener('mouseleave', () => { el.style.willChange = 'auto'; }, { passive: true });
   });
 }
 
@@ -1174,10 +1093,19 @@ function initHScroll() {
   const hScroll = document.getElementById('h-scroll');
   if (!hScroll) return;
   let isDown = false, startX, scrollLeft;
-  hScroll.addEventListener('mousedown', e => { isDown = true; startX = e.pageX - hScroll.offsetLeft; scrollLeft = hScroll.scrollLeft; hScroll.style.cursor = 'grabbing'; });
+  hScroll.addEventListener('mousedown', e => {
+    isDown = true;
+    startX = e.pageX - hScroll.offsetLeft;
+    scrollLeft = hScroll.scrollLeft;
+    hScroll.style.cursor = 'grabbing';
+  });
   hScroll.addEventListener('mouseleave', () => { isDown = false; hScroll.style.cursor = 'grab'; });
   hScroll.addEventListener('mouseup', () => { isDown = false; hScroll.style.cursor = 'grab'; });
-  hScroll.addEventListener('mousemove', e => { if (!isDown) return; e.preventDefault(); hScroll.scrollLeft = scrollLeft - (e.pageX - hScroll.offsetLeft - startX) * 1.5; });
+  hScroll.addEventListener('mousemove', e => {
+    if (!isDown) return;
+    e.preventDefault();
+    hScroll.scrollLeft = scrollLeft - (e.pageX - hScroll.offsetLeft - startX) * 1.5;
+  });
 }
 
 /* -----------------------------------------------
@@ -1189,9 +1117,13 @@ function initContactForm() {
   const submitBtn = document.getElementById('submit-btn');
   const submitLabel = document.getElementById('submit-label');
   if (!form) return;
+
   form.querySelectorAll('.form-input,.form-textarea').forEach(input => {
-    input.addEventListener('blur', () => { input.classList.toggle('invalid', !input.validity.valid && input.value.length > 0); });
+    input.addEventListener('blur', () => {
+      input.classList.toggle('invalid', !input.validity.valid && input.value.length > 0);
+    });
   });
+
   form.addEventListener('submit', async e => {
     e.preventDefault();
     const formData = new FormData(form);
@@ -1206,7 +1138,11 @@ function initContactForm() {
     statusEl.className = 'form-msg';
     statusEl.textContent = '';
     try {
-      const res = await fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams(formData).toString() });
+      const res = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(formData).toString()
+      });
       if (res.ok) {
         statusEl.className = 'form-msg success';
         statusEl.textContent = '✅ Mensagem enviada! Entrarei em contato em breve.';
@@ -1224,20 +1160,23 @@ function initContactForm() {
 }
 
 /* -----------------------------------------------
-   LOADER
+   LOADER + INICIALIZAÇÃO
    ----------------------------------------------- */
 function initLoader() {
   const fill = document.getElementById('loader-fill');
   const pctEl = document.getElementById('loader-pct');
   let pct = 0;
+
   const intv = setInterval(() => {
     pct = Math.min(pct + Math.random() * 10 + 2, 100);
     fill.style.width = pct + '%';
     pctEl.textContent = Math.floor(pct) + '%';
+
     if (pct >= 100) {
       clearInterval(intv);
       setTimeout(() => {
         document.getElementById('loader').classList.add('hidden');
+        // Inicia tudo após o loader
         initVimeoCards();
         initLocalVideoCards();
         initWillChange();
